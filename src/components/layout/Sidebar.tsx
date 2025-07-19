@@ -105,7 +105,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                   variant="ghost"
                   size="icon"
                   onClick={toggleSidebar}
-                  className="absolute top-1 right-1 hidden md:flex"
+                  className="absolute top--1 left-5 hidden md:flex"
                 >
                   <ChevronRight className="h-5 w-5" />
                 </Button>

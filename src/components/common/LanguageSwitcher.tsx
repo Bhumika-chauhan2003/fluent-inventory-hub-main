@@ -18,10 +18,10 @@ const LanguageSwitcher: React.FC = () => {
 
   const languages: { code: Language; label: string }[] = [
     { code: 'en', label: t('languages.en') },
-    { code: 'hi', label: t('languages.hi') },
-    { code: 'bn', label: t('languages.bn') },
+    // { code: 'hi', label: t('languages.hi') },
+    // { code: 'bn', label: t('languages.bn') },
     { code: 'es', label: t('languages.es') },
-    { code: 'pt', label: t('languages.pt') },
+    // { code: 'pt', label: t('languages.pt') },
   ];
 
   return (

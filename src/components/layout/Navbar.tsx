@@ -65,7 +65,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar, sidebarOpen }) => {
   return (
     <header
       className="fixed top-0 right-0 left-0 bg-white border-b border-gray-200 z-30 transition-all duration-300 ease-in-out"
-      style={{ left: sidebarOpen ? '16rem' : '0' }}
+      style={{ left: sidebarOpen ? '16rem' : '4rem' }}
     >
       <div className="flex items-center justify-between h-16 px-4 md:px-6">
         <div className="flex items-center">
@@ -84,16 +84,16 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar, sidebarOpen }) => {
             />
           </div>
         </div>
-<div className="text-sm font-medium mr-6 hidden sm:block text-gray-700">
+<div className="text-sm font-medium mr-6 hidden sm:block text-gray-700 ml-auto">
             ⏳ {userInfo.expiring || '...'}
           </div>
         <div className="flex items-center space-x-4">
           <LanguageSwitcher />
 
-          <Button variant="ghost" size="icon" className="relative">
+          {/* <Button variant="ghost" size="icon" className="relative">
             <Bell className="h-5 w-5" />
             <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
-          </Button>
+          </Button> */}
 
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 rounded-full bg-inventory-primary text-white flex items-center justify-center">

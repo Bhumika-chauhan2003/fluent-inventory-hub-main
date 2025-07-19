@@ -23,7 +23,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       
       <div className={cn(
         "flex flex-col flex-1 transition-all duration-300 ease-in-out",
-        sidebarOpen ? (isMobile ? "ml-0" : "md:ml-64") : "ml-0"
+        sidebarOpen ? (isMobile ? "ml-0" : "md:ml-64") : "ml-0 md:ml-16"
       )}>
         <Navbar toggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} />
         <main className="flex-1 p-4 md:p-6 pt-20 md:pt-24">
