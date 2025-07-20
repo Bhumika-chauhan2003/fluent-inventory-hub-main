@@ -26,7 +26,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar, sidebarOpen }) => {
           '/api/macros/s/AKfycbxMZsH-pM2tebJTnpeDkEXPysA4ArFpGe8XZSJhp3dNiQXl5Mbam7u6x8qvqja1RQy1/exec',
           {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'acpplication/json' },
             body: JSON.stringify({ action: 'getUserInfo' })
           }
         );
@@ -61,6 +61,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar, sidebarOpen }) => {
     keysToRemove.forEach(key => localStorage.removeItem(key));
     navigate('/login');
   };
+
 
   return (
     <header
@@ -100,7 +101,8 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar, sidebarOpen }) => {
               <User className="h-4 w-4" />
             </div>
             <span className="hidden md:inline-block font-medium">
-              {userInfo.username || 'User'}
+           {userInfo.username?.trim().substring(0, 4) || "User"}
+
             </span>
             <Button variant="ghost" size="icon" onClick={handleLogout} title="Logout">
               <LogOut className="h-5 w-5" />
