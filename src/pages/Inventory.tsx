@@ -217,9 +217,9 @@ console.log("Deleting product:", productToDelete);
             <Plus className="mr-2 h-4 w-4" /> {t("inventory.add")}
           </Link>
         </Button>
-        <Button variant="outline" onClick={() => setShowImportDialog(true)}>
+        {/* <Button variant="outline" onClick={() => setShowImportDialog(true)}>
           <FileUp className="mr-2 h-4 w-4" /> {t("import.importData")}
-        </Button>
+        </Button> */}
         <Button variant="outline" onClick={handleExportData}>
           <FileDown className="mr-2 h-4 w-4" /> {t("inventory.export")}
         </Button>
