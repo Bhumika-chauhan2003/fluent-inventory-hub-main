@@ -136,12 +136,12 @@ console.log("Form default values:", form.getValues());
       action: "product",
       "productName": data.productName,
       "specification": data.specification,
-      "Category_Id": data.category,
-      "Supplier_Id": data.supplier,
+      "Category_ID": data.category,
+      "Supplier_ID": data.supplier,
       "purchasePrice": data.purchasePrice,
       "sellingPrice": data.sellingPrice,
       "quantity": data.quantity,
-      "IVA/Tax": data.IVA,
+      "IVA": data.IVA,
       "EAN_Code": data.EANCode,
       "Short_Code": data.ShortCode,
       "Product_Family_Code": data.ProductFamilyCode,
@@ -156,7 +156,7 @@ console.log("Payload to be sent:", payload);
     try {
       debugger;
       await fetch(
-        "/api/macros/s/AKfycbzvyGYf3FK_rVXPduFMPzkZJFJbewBsZPYDZEJr9pp7bORq-ooQb-1ahHHoBTojrIk24Q/exec?action=product",
+        "/api/macros/s/AKfycbxNIi6Oc_4qGN-EmmoLG6IfTtnWfcRjC_uXsxfROu-VYTc5iR0kaxmm69yubJw1X747cw/exec?action=product",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

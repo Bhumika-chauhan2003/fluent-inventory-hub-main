@@ -104,24 +104,79 @@ useEffect(() => {
   ];
 
   // Utility functions
-  const handleExport = () => {
-    // Create CSV data
-    const headers = ['Product Code', 'Product Name', 'Category', 'Quantity', 'Purchase Price', 'Selling Price'];
-    const rows = products.map(p => [
-      p.productCode,
-      p.productName,
-      p.category,
-      p.quantity,
-      p.purchasePrice,
-      p.sellingPrice
-    ]);
+  // const handleExport = () => {
+  //   // Create CSV data
+  //   const headers = ['Product Code', 'Product Name', 'Category', 'Quantity', 'Purchase Price', 'Selling Price'];
+  //   const rows = products.map(p => [
+  //     p.productCode,
+  //     p.productName,
+  //     p.category,
+  //     p.quantity,
+  //     p.purchasePrice,
+  //     p.sellingPrice
+  //   ]);
     
+  //   const csvContent = [
+  //     headers.join(','),
+  //     ...rows.map(row => row.join(','))
+  //   ].join('\n');
+    
+  //   // Create and download file
+  //   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  //   const link = document.createElement('a');
+  //   const url = URL.createObjectURL(blob);
+  //   link.setAttribute('href', url);
+  //   link.setAttribute('download', 'inventory_export.csv');
+  //   link.style.visibility = 'hidden';
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
+    
+  //   toast({
+  //     title: "Export Complete",
+  //     description: "Inventory data has been exported to CSV",
+  //   });
+  // };
+  const handleExport = async () => {
+  try {
+    // Step 1: Fetch product data from the API
+    const response = await fetch(`/api/macros/s/AKfycbwbuRL93F1StcFaduUxPacrAa3uoo-NNsM7xpHfmi128n9ClEVO8MRI8M4Z81QNiJlr1g/exec?action=product`);
+    const result = await response.json();
+console.log("Fetched products:", result);
+    if (!result?.success || !Array.isArray(result?.data)) {
+      throw new Error("Failed to fetch data from API.");
+    }
+
+    const products = result.data;
+console.log("Fetched products:", products);
+    // Step 2: Define the fields you want to export
+    const displayedFields = [
+      { key: "productid", label: t("product.code") },
+      { key: "productName", label: t("product.name") },
+      { key: "Category_Name", label: t("product.category") },
+      { key: "quantity", label: t("product.quantity") },
+      { key: "Warehouse_Name", label: t("product.warehouse") },
+      { key: "sellingPrice", label: t("product.sellingPrice") },
+      { key: "RemaningProduct", label: t("product.RemaingQuantity") },
+
+      
+    ];
+console.log("Exporting products:", displayedFields);
+
+
+    // Step 3: Convert data to CSV
+    const headers = displayedFields.map(field => field.label);
+    const rows = products.map(product =>
+      displayedFields.map(field => product[field.key] ?? "")
+    );
+
+console.log("Exporting displayedFields:", displayedFields);
     const csvContent = [
       headers.join(','),
       ...rows.map(row => row.join(','))
     ].join('\n');
-    
-    // Create and download file
+
+    // Step 4: Download the CSV file
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
@@ -131,12 +186,19 @@ useEffect(() => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
+
     toast({
-      title: "Export Complete",
+      title: "✅ Export Complete",
       description: "Inventory data has been exported to CSV",
     });
-  };
+  } catch (error) {
+    console.error("Export failed:", error);
+    toast({
+      title: "❌ Export Failed",
+      description: "Unable to export inventory data. Please try again.",
+    });
+  }
+};
 
   const handlePrint = () => {
     window.print();
@@ -150,15 +212,15 @@ useEffect(() => {
     <div>
       <PageHeader title={t('dashboard.title')}>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setShowImportDialog(true)}>
+          {/* <Button variant="outline" onClick={() => setShowImportDialog(true)}>
             <FileUp className="mr-2 h-4 w-4" /> {t('import.importData')}
-          </Button>
+          </Button> */}
           <Button variant="outline" onClick={handleExport}>
             <FileDown className="mr-2 h-4 w-4" /> {t('common.export')}
           </Button>
-          <Button variant="outline" onClick={handlePrint}>
+          {/* <Button variant="outline" onClick={handlePrint}>
             <Printer className="mr-2 h-4 w-4" /> {t('reports.print')}
-          </Button>
+          </Button> */}
         </div>
       </PageHeader>
 
@@ -168,14 +230,14 @@ useEffect(() => {
             <LayoutDashboard className="mr-2 h-4 w-4" />
             {t('dashboard.title')}
           </TabsTrigger>
-          <TabsTrigger value="insights">
+          {/* <TabsTrigger value="insights">
             <Brain className="mr-2 h-4 w-4" />
             {t('reports.askAI')}
-          </TabsTrigger>
-          <TabsTrigger value="bill">
+          </TabsTrigger> */}
+          {/* <TabsTrigger value="bill">
             <FileText className="mr-2 h-4 w-4" />
             {t('billing.title')}
-          </TabsTrigger>
+          </TabsTrigger> */}
         </TabsList>
         
         <TabsContent value="dashboard" className="space-y-6">
