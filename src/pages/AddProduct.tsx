@@ -97,7 +97,7 @@ const AddProduct: React.FC = () => {
     }
   }, [watchPurchasePrice, watchIVA, watchMargin]);
 
-
+// Add product Api //
 console.log("Form default values:", form.getValues());
   React.useEffect(() => {
     const fetchDropdownData = async () => {
