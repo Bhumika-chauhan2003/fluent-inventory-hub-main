@@ -298,6 +298,24 @@
     "cancel": "Cancelar",
     "selectPlaceholder": "Seleccionar...",
     "AddProduct": "Agregar Producto"
+  },
+  "PrintInvoive":{
+"Delivary":"Nota de Entrega",
+    "Invoice": "Factura",
+    "Customer": "Cliente",
+    "Date": "Fecha",
+    "InvoiceNumber": "Número de Factura",
+    "ProductName": "Nombre del Producto",
+    "Quantity": "Cantidad",
+    "Price": "Precio",
+    "Total": "Total",
+    "Discount": "Descuento",
+    "Subtotal": "Subtotal",
+    "Tax": "Impuesto",
+    "GrandTotal": "Total General",
+    "ThankYou": "Gracias por su compra",
+    "Documnet": "Documento",
+    "Print": "Imprimir"
   }
 
 

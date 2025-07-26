@@ -1,3 +1,4 @@
+import { Description } from '@radix-ui/react-toast';
 
 export interface Product {
   productid: string;
@@ -49,7 +50,7 @@ export interface User {
 }
 
 export interface Invoice {
-  id: string;
+  id?: string;
   invoiceNumber: string;
   date: string;
   customerName?: string;
@@ -57,11 +58,15 @@ export interface Invoice {
   customerAddress?: string;
   items: InvoiceItem[];
   subtotal: number;
-  discount: number;
+  discount?: number;
   tax: number;
   total: number;
-  createdBy: string;
-  status: 'pending' | 'completed' | 'cancelled';
+  createdBy?: string;
+  createdAt?: string;
+  updatedBy?: string;
+  updatedAt?: string;
+  paymentStatus?: 'paid' | 'unpaid' | 'partially_paid';
+  status?: 'pending' | 'completed' | 'cancelled';
 }
 
 export interface InvoiceItem {
@@ -70,6 +75,14 @@ export interface InvoiceItem {
   quantity: number;
   price: number;
   total: number;
+  unit: string;
+  description?: string; // Use lowercase for consistency
+  unit_Name?: string;
+  itemId?: string;
+  itemQuantity?: number;
+  unitPrice?: number;
+  itemDescription?: string;
+  itemCode?: string;
 }
 
 export interface ReportData {

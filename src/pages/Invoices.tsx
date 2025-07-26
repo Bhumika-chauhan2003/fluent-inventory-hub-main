@@ -30,8 +30,10 @@ import {
 import { Invoice } from '@/types';
 import { ColumnDef } from '@tanstack/react-table';
 import logo from '../assets/images/logo.png';
+import { Description } from '@radix-ui/react-toast';
 
 const mapInvoiceKeys = (invoice: any) => {
+  debugger;
   let formattedDate = invoice.Date;
   if (invoice.Date) {
     const d = new Date(invoice.Date);
@@ -53,16 +55,20 @@ const mapInvoiceKeys = (invoice: any) => {
     total: invoice.GrandTotal,
     status: invoice.status,
     items: (invoice.items || []).map((item: any) => ({
-      productId: item.ProductID,
-      productName: item.ProductName,
-      quantity: item.Quantity,
-      price: item.Price,
-      total: item.Total,
-    })),
+  productId: item.ProductID,
+  productName: item.ProductName,
+  quantity: item.Quantity,
+  price: item.Price,
+  total: item.Total,
+  unit: item.unitName || item.Unit_Name || item.unit || "", // always map to 'unit'
+  description: item.description || item.Description || "",   // always map to 'description'
+})),
   };
 };
+//console.log("Mapped Invoice Keys:", mapInvoiceKeys);
 
 const Invoices: React.FC = () => {
+  debugger;
   const { t } = useTranslation();
   const [invoiceData, setInvoiceData] = useState<Invoice[]>([]);
   const [invoiceToDelete, setInvoiceToDelete] = useState<string | null>(null);
@@ -78,131 +84,224 @@ const handlePrint = () => {
   if (!printWindow) return;
 
   const logoURL = logo; // already imported
-
+const minRows = 25;
+const items = selectedInvoice.items;
+const paddedItems = [
+  ...items,
+  ...Array(Math.max(0, minRows - items.length)).fill({
+    productName: '',
+    description: '',
+    quantity: '',
+    unit: '',
+    price: '',
+    total: '',
+   
+  }),
+];
   printWindow.document.open();
-  printWindow.document.write(`
-    <html>
-      <head>
-        <title>Invoice #${selectedInvoice.invoiceNumber}</title>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            color: #000;
-          }
-          .invoice-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-          }
-          .invoice-header img {
-            height: 60px;
-          }
-          .invoice-section {
-            margin-bottom: 16px;
-          }
-          .invoice-box {
-            background-color: #f9f9f9;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-          }
-          table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-          }
-          th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: right;
-          }
-          th {
-            background-color: #f0f0f0;
-            text-align: left;
-          }
-          .total-row {
-            font-weight: bold;
-            border-top: 2px solid #000;
-          }
-          .footer {
-            text-align: center;
-            font-size: 12px;
-            margin-top: 30px;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="invoice-header">
-          <img src="${logoURL}" alt="Logo" />
-          <div>
-            <div><strong>Invoice #${selectedInvoice.invoiceNumber}</strong></div>
-            <div>${selectedInvoice.date}</div>
-          </div>
-        </div>
+printWindow.document.write(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delivery Note</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    @page {
+      size: A4;
+      margin: 20mm;
+    }
+    body {
+      width: 210mm;
+      height: 297mm;
+      margin: 0 auto;
+      padding: 20mm;
+      background: #fff;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    td, th {
+      border: 1px solid #000;
+      padding: 4px;
+      font-size: 12px;
+      text-align: left;
+    }
+        tr, td {
+    height: 20px; /* Ensures all rows have the same height */
+    min-height: 28px;
+    vertical-align: middle;
+  }
+    .text-right {
+      text-align: right;
+    }
+    .header-box {
+      border: 1px solid #000;
+      height: 80px;
+      margin-bottom: 10px;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+    }
+    .half {
+      width: 48%;
+    }
+    .table-header {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+    .bordered {
+      border: 1px solid #000;
+      padding: 4px;
+    }
+    .observaciones {
+      height: 80px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header-box"><h2 style="margin: 10px;">Delivery Note</h2></div>
 
-        <div class="invoice-section invoice-box">
-          <strong>Customer Information</strong><br/>
-          ${selectedInvoice.customerName || 'Walk-in Customer'}<br/>
-          ${selectedInvoice.customerContact || ''}<br/>
-          ${selectedInvoice.customerAddress || ''}
-        </div>
+  <div><strong>${selectedInvoice.customerName || ''}</strong></div>
 
-        <div class="invoice-section">
-          <strong>Bill Items</strong>
-          <table>
-            <thead>
-              <tr>
-                <th style="text-align: left;">Product</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${selectedInvoice.items.map(item => `
-                <tr>
-                  <td style="text-align: left;">${item.productName}</td>
-                  <td>${item.quantity}</td>
-                  <td>$${item.price.toFixed(2)}</td>
-                  <td>$${item.total.toFixed(2)}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
+  <div class="row">
+    <div><strong>${selectedInvoice.customerContact || ''}</strong></div>
+    <div class="half">
+      <table>
+        <tr class="table-header">
+          <th>DOCUMENT</th>
+          <th>NUMBER</th>
+          <th>PAGE</th>
+          <th>DATE</th>
+        </tr>
+        <tr>
+          <td>Delivery Note</td>
+          <td>${selectedInvoice.invoiceNumber}</td>
+          <td>1</td>
+          <td>${selectedInvoice.date}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
 
-          <div style="text-align: right;">
-            <div>Subtotal: $${selectedInvoice.subtotal.toFixed(2)}</div>
-            <div>Discount: -$${selectedInvoice.discount.toFixed(2)}</div>
-            <div>Tax: +$${selectedInvoice.tax.toFixed(2)}</div>
-            <div class="total-row">Grand Total: $${selectedInvoice.total.toFixed(2)}</div>
-          </div>
-        </div>
+  <table>
+    <tr class="table-header">
+      <th>TAX ID</th>
+      <th>AGENT</th>
+      <th>PAYMENT METHOD</th>
+    </tr>
+    <tr>
+      <td>${selectedInvoice.tax}</td>
+      <td></td>
+      <td>Online / Cash</td>
+    </tr>
+  </table>
 
-        <div class="footer">
-          Thank you for your business!
-        </div>
+  <table>
+    <thead>
+      <tr class="table-header">
+        <th>ITEM</th>
+        <th>DESCRIPTION</th>
+        <th>QUANTITY</th>
+        <th>UNIT</th>
+        <th>UNIT PRICE</th>
+        <th>DISCOUNT</th>
+        <th>TOTAL</th>
+      </tr>
+    </thead>
+    <tbody>
+  ${paddedItems.map(item => `
+    <tr>
+      <td>${item.productName || ''}</td>
+      <td>${item.description || ''}</td>
+      <td class="text-right">${item.quantity ?? ''}</td>
+      <td class="text-right">${item.unit || ''}</td>
+      <td class="text-right">${item.price !== '' && item.price != null ? Number(item.price).toFixed(2) : ''}</td>
+      <td class="text-right">${
+  item.productName
+    ? (item.discount !== undefined && item.discount !== '' ? Number(item.discount).toFixed(2) : (selectedInvoice.discount ? Number(selectedInvoice.discount).toFixed(2) : ''))
+    : ''
+}</td>
+      <td class="text-right">${item.total !== '' && item.total != null ? Number(item.total).toFixed(2) : ''}</td>
+    </tr>
+  `).join('')}
+</tbody>
+  </table>
 
-        <script>
-          window.onload = function() {
-            window.print();
-            window.close();
-          };
-        </script>
-      </body>
-    </html>
-  `);
+  <table>
+    <tr class="table-header">
+      <th>TYPE</th>
+      <th>AMOUNT</th>
+      <th>DISCOUNT</th>
+      <th>EARLY PAYMENT</th>
+      <th>SHIPPING</th>
+      <th>FINANCING</th>
+      <th>BASE</th>
+      <th>VAT</th>
+      <th>RE.</th>
+    </tr>
+    ${selectedInvoice.items.map(item => `
+      <tr>
+        <td>${item.productName}</td>
+        <td>$${item.price != null ? Number(item.price).toFixed(2) : ''}</td>
+        <td>${selectedInvoice.discount ? Number(selectedInvoice.discount).toFixed(2) : ''}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    `).join('')}
+  </table>
+
+  <div class="row">
+    <div class="half">
+      <strong>NOTES:</strong>
+      <div class="bordered observaciones"></div>
+    </div>
+    <div class="half text-right">
+      <table>
+        <tr class="table-header">
+          <th>TOTAL:</th>
+          <td>$${selectedInvoice.total != null ? Number(selectedInvoice.total).toFixed(2) : ''}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
+
+<script>
+  window.onload = function() {
+    window.print();
+    window.close();
+  };
+</script>
+`);
+
   printWindow.document.close();
 };
 
 
   const fetchInvoices = useCallback(async () => {
+    debugger;
+    console.log("Fetching invoices...");
     try {
       const response = await fetch(
-        '/api/macros/s/AKfycbya0dPsiaDiX8qgb19w5NDek4Lp5FdiXMDscQIQ7LtR4bO26wQE-FgcP6-43P9-y0FbzQ/exec?action=invoice'
+        '/api/macros/s/AKfycbxQyYRWkRcM30UyrjPlNPPChviImGl--OLb2Fn4k8MmU2OUGS5s0R6lmm46bq2uQX-h/exec?action=Invoicetstenew'
       );
       const data = await response.json();
+      console.log("Fetched Invoices:", data);
       if (data.success && Array.isArray(data.data)) {
         const mapped = data.data.map(mapInvoiceKeys);
         setInvoiceData(mapped);
@@ -419,7 +518,7 @@ console.log("Deleting product:", invoiceToDelete);
               <Printer className="mr-2 h-4 w-4" />
               {t('invoices.print')}
             </Button>
-          </DialogFooter>
+          </DialogFooter>   
         </DialogContent>
       </Dialog>
     </div>
