@@ -97,7 +97,7 @@ const AddProduct: React.FC = () => {
     const fetchDropdownData = async () => {
       try {
         const baseUrl =
-          "/api/macros/s/AKfycbzCfR-b6Nxb_foHkE2SlJR_c4uPRm_CjCtsX64UoQmdacbftdNS-NM8nY6CJok0m0CBtQ/exec";
+          "https://script.google.com/macros/s/AKfycby5kQN_AfHWZjqevDpnjfakKYDSCcLSxk2iPEnf5c3ub99FfzzcZVWoa8wRVjLJpE-FZg/exec";
         const [catRes, supRes, unitRes, wareRes] = await Promise.all([
           fetch(`${baseUrl}?entity=Category&action=list&active=1`),
           fetch(`${baseUrl}?action=list&entity=Supplier&active=1`),
@@ -131,7 +131,7 @@ const AddProduct: React.FC = () => {
       setLoading(true);
       try {
         const res = await fetch(
-          `/api/macros/s/AKfycbwbuRL93F1StcFaduUxPacrAa3uoo-NNsM7xpHfmi128n9ClEVO8MRI8M4Z81QNiJlr1g/exec?action=product&productid=${productId}`
+          `https://script.google.com/macros/s/AKfycby5kQN_AfHWZjqevDpnjfakKYDSCcLSxk2iPEnf5c3ub99FfzzcZVWoa8wRVjLJpE-FZg/exec?action=product&productid=${productId}`
         );
         const json = await res.json();
         const prod = Array.isArray(json.data) ? json.data[0] : json.data;
@@ -191,7 +191,7 @@ const AddProduct: React.FC = () => {
     console.log("Payload to send:", payload);
     try {
       const res = await fetch(
-        `/api/macros/s/AKfycbxGNLaviDYL-UgegF3hqpjZGaM_klxdhn2T3orCFGmv4dQB7kR1SOYn02yvovReTa0UMA/exec`,
+        `https://script.google.com/macros/s/AKfycby5kQN_AfHWZjqevDpnjfakKYDSCcLSxk2iPEnf5c3ub99FfzzcZVWoa8wRVjLJpE-FZg/exec`,
         {
           method: "POST",
           headers: {

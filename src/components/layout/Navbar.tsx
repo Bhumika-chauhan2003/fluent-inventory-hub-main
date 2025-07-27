@@ -66,7 +66,7 @@ useEffect(() => {
       }
 
       const response = await fetch(
-        `https://script.google.com/macros/s/AKfycbywEosCCMqxvbNns3yfyihObb7FucnS-Qnd2rsHeBhdoXX-nK63kjeK086593glYyVO/exec?device=${deviceId}`,
+        `https://script.google.com/macros/s/AKfycbwTf71UTfGGZJgZ5RYpjQAzWB_DftIDw5u-Mhez8kHaha6Xtuwq6OaL_QtbPOroWOVF/exec?device=${deviceId}`,
         {
           method: 'GET',
           // ❌ Do NOT include unnecessary headers unless required

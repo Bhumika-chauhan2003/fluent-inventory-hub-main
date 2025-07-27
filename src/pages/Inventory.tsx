@@ -45,7 +45,7 @@ const Inventory: React.FC = () => {
 
   // ✅ Use proxy path to avoid CORS issue
   const API_URL =
-    "/api/macros/s/AKfycbwbuRL93F1StcFaduUxPacrAa3uoo-NNsM7xpHfmi128n9ClEVO8MRI8M4Z81QNiJlr1g/exec";
+    "https://script.google.com/macros/s/AKfycby5kQN_AfHWZjqevDpnjfakKYDSCcLSxk2iPEnf5c3ub99FfzzcZVWoa8wRVjLJpE-FZg/exec";
 
   useEffect(() => {
     const fetchProducts = async () => {

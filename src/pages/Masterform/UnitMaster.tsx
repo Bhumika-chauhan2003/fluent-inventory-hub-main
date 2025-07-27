@@ -14,7 +14,7 @@ import { useTranslation } from "@/hooks/useTranslationWrapper";
 import { toast } from "sonner";
 
 const API_URL =
-  "/api/macros/s/AKfycbzFou43taQuWEhZUDSUOZhYmDnyE1zIq8eKWpDI5fgzqUOSut-aXhv99QHwt-9Iq3K_/exec";
+  "https://script.google.com/macros/s/AKfycby5kQN_AfHWZjqevDpnjfakKYDSCcLSxk2iPEnf5c3ub99FfzzcZVWoa8wRVjLJpE-FZg/exec";
 
 const UnitMaster: React.FC = () => {
   const { t } = useTranslation();

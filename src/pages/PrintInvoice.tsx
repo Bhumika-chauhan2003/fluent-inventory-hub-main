@@ -10,7 +10,7 @@ const PrintInvoice: React.FC = () => {
   useEffect(() => {
     const fetchInvoice = async () => {
       try {
-        const response = await fetch(`/api/macros/s/AKfycbyfySJDvVC0Nqf-DKFGF-yH52P3FS1a6a5CWkEz35KlfcD42qCaEoO0-TId3XH2gsmoHA/exec?action=Invoicetstenew&InvoiceNumber=${invoiceNumber}`);
+        const response = await fetch(`https://script.google.com/macros/s/AKfycby5kQN_AfHWZjqevDpnjfakKYDSCcLSxk2iPEnf5c3ub99FfzzcZVWoa8wRVjLJpE-FZg/exec?action=Invoicetstenew&InvoiceNumber=${invoiceNumber}`);
         const result = await response.json();
         setInvoice(result.data);
       } catch (error) {

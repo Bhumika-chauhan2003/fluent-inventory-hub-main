@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 
 // ✅ Replace this with your full deployed Google Apps Script Web App URL
-const API_URL = "https://script.google.com/macros/s/AKfycbyQF3EsHe78OGMvdReMdGe_pwN0I8fc220q-GzFlnnLe1zIr1Gp9USQOjQ9ThSIXNeb/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwTf71UTfGGZJgZ5RYpjQAzWB_DftIDw5u-Mhez8kHaha6Xtuwq6OaL_QtbPOroWOVF/exec";
 // Validation schema
 const authSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),

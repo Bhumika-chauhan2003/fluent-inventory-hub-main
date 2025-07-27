@@ -66,7 +66,7 @@ useEffect(() => {
       try {
         // Replace with your actual API endpoints
         const statsRes = await fetch
-        ("/api/macros/s/AKfycbwMCliG3Dm1QAucYCpSQOm7jMXz33eNeGSCG0FnnKHud86T3F-nzpDc8cwlV71SFFKIBw/exec?action=summary");
+        ("https://script.google.com/macros/s/AKfycby5kQN_AfHWZjqevDpnjfakKYDSCcLSxk2iPEnf5c3ub99FfzzcZVWoa8wRVjLJpE-FZg/exec?action=summary");
         const statsData = await statsRes.json();
         setDashboardStats({
           totalProducts: statsData.data.totalProducts,
@@ -140,7 +140,7 @@ useEffect(() => {
   const handleExport = async () => {
   try {
     // Step 1: Fetch product data from the API
-    const response = await fetch(`/api/macros/s/AKfycbwbuRL93F1StcFaduUxPacrAa3uoo-NNsM7xpHfmi128n9ClEVO8MRI8M4Z81QNiJlr1g/exec?action=product`);
+    const response = await fetch(`https://script.google.com/macros/s/AKfycby5kQN_AfHWZjqevDpnjfakKYDSCcLSxk2iPEnf5c3ub99FfzzcZVWoa8wRVjLJpE-FZg/exec?action=product`);
     const result = await response.json();
 console.log("Fetched products:", result);
     if (!result?.success || !Array.isArray(result?.data)) {
