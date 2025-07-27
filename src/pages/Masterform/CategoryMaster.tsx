@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/card';
 import { toast } from 'sonner';
 
-const API_URL = 'https://script.google.com/macros/s/AKfycby5kQN_AfHWZjqevDpnjfakKYDSCcLSxk2iPEnf5c3ub99FfzzcZVWoa8wRVjLJpE-FZg/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzJtgE2o0cDAW5X3u8belaDMvkdRyyMCV7eO0F71NKSK8uYQ-bWmCroCycBwMjSWJ6UHw/exec';
 
 const CategoryMaster: React.FC = () => {
   const { t } = useTranslation();

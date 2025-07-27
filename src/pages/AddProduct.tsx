@@ -102,7 +102,7 @@ console.log("Form default values:", form.getValues());
   React.useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const baseUrl = "https://script.google.com/macros/s/AKfycby5kQN_AfHWZjqevDpnjfakKYDSCcLSxk2iPEnf5c3ub99FfzzcZVWoa8wRVjLJpE-FZg/exec";
+        const baseUrl = "https://script.google.com/macros/s/AKfycbzJtgE2o0cDAW5X3u8belaDMvkdRyyMCV7eO0F71NKSK8uYQ-bWmCroCycBwMjSWJ6UHw/exec";
         const [catRes, supRes, unitRes, wareRes] = await Promise.all([
           fetch(`${baseUrl}?entity=Category&action=list&active=1`),
           fetch(`${baseUrl}?action=list&entity=Supplier&active=1`),
@@ -156,7 +156,7 @@ console.log("Payload to be sent:", payload);
     try {
       debugger;
       await fetch(
-        "https://script.google.com/macros/s/AKfycby5kQN_AfHWZjqevDpnjfakKYDSCcLSxk2iPEnf5c3ub99FfzzcZVWoa8wRVjLJpE-FZg/exec?action=product",
+        "https://script.google.com/macros/s/AKfycbzJtgE2o0cDAW5X3u8belaDMvkdRyyMCV7eO0F71NKSK8uYQ-bWmCroCycBwMjSWJ6UHw/exec?action=product",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

@@ -66,7 +66,7 @@ useEffect(() => {
       try {
         // Replace with your actual API endpoints
         const statsRes = await fetch
-        ("https://script.google.com/macros/s/AKfycby5kQN_AfHWZjqevDpnjfakKYDSCcLSxk2iPEnf5c3ub99FfzzcZVWoa8wRVjLJpE-FZg/exec?action=summary");
+        ("https://cors-anywhere.herokuapp.com/https://script.google.com/macros/s/AKfycbx5pHFE0cz-80GW-_3NaP0ilnOFDdvS__PirroRT7fv0EZAZwxKo_R7kop9p71-o0GllQ/exec?action=summary");
         const statsData = await statsRes.json();
         setDashboardStats({
           totalProducts: statsData.data.totalProducts,
@@ -140,7 +140,7 @@ useEffect(() => {
   const handleExport = async () => {
   try {
     // Step 1: Fetch product data from the API
-    const response = await fetch(`https://script.google.com/macros/s/AKfycby5kQN_AfHWZjqevDpnjfakKYDSCcLSxk2iPEnf5c3ub99FfzzcZVWoa8wRVjLJpE-FZg/exec?action=product`);
+    const response = await fetch(`https://script.google.com/macros/s/AKfycbzJtgE2o0cDAW5X3u8belaDMvkdRyyMCV7eO0F71NKSK8uYQ-bWmCroCycBwMjSWJ6UHw/exec?action=product`);
     const result = await response.json();
 console.log("Fetched products:", result);
     if (!result?.success || !Array.isArray(result?.data)) {
