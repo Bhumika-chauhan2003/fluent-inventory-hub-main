@@ -11,10 +11,8 @@ import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 
-// API URL
-const API_URL =
-  "/api/macros/s/AKfycbzzraVs_7iasoXwvLVI17XxpK0y4NHJhe8NTO1kfwZZTPl9zki89qotKhgo2XpLNpeQ/exec";
-
+// ✅ Replace this with your full deployed Google Apps Script Web App URL
+const API_URL = "https://script.google.com/macros/s/AKfycbyQF3EsHe78OGMvdReMdGe_pwN0I8fc220q-GzFlnnLe1zIr1Gp9USQOjQ9ThSIXNeb/exec";
 // Validation schema
 const authSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
@@ -25,7 +23,7 @@ const authSchema = z.object({
 const DEVICE_ID_KEY = "deviceId";
 const EXPIRY_DATE_KEY = "expiryDate";
 
-// Helper function to get or set static deviceId
+// ✅ Get or set static deviceId
 function getStaticDeviceId() {
   let storedDeviceId = localStorage.getItem(DEVICE_ID_KEY);
   if (!storedDeviceId) {
@@ -36,28 +34,29 @@ function getStaticDeviceId() {
   return storedDeviceId;
 }
 
-// Helper functions for register and login
+// ✅ API request to register/login user
 async function authenticateUser(
   action: "register" | "login",
   username: string,
   password: string,
   device: string
 ) {
+  const formData = new URLSearchParams();
+  formData.append("action", action);
+  formData.append("username", username);
+  formData.append("password", password);
+  formData.append("device", device);
+
   try {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: JSON.stringify({
-        action,
-        username,
-        password,
-        device,
-      }),
+      body: formData.toString(),
     });
-    const data = await response.text();
-    console.log(`${action} response:`, data);
+
+    const data = await response.json(); // Google Apps Script must return JSON
     return data;
   } catch (error) {
     console.error(`Error in ${action}User:`, error);
@@ -80,15 +79,13 @@ export default function SingleUserAuthUI() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Get or set static deviceId
     const staticDeviceId = getStaticDeviceId();
     setDeviceId(staticDeviceId);
 
-    // Check if the session has expired
     const expiryDate = localStorage.getItem(EXPIRY_DATE_KEY);
     if (expiryDate && new Date(expiryDate) < new Date()) {
       console.log("Session expired, redirecting to logout");
-      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("auth_token");
       localStorage.removeItem(EXPIRY_DATE_KEY);
       navigate("/logout");
     }
@@ -97,29 +94,34 @@ export default function SingleUserAuthUI() {
   const onSubmit = async (data: { username: string; password: string }) => {
     try {
       const action = isRegistering ? "register" : "login";
-      const responseMessage = await authenticateUser(
+      const response = await authenticateUser(
         action,
         data.username,
         data.password,
         deviceId
       );
 
-      if (responseMessage.includes("Login successful")) {
-        debugger ;
-        toast.success("Login successful");
+      if (response.success) {
+        toast.success(response.message);
 
-        // Set expiry date 3 months from now
-        const expiryDate = new Date();
-       // expiryDate.setMonth(expiryDate.getMonth() + 3);
-       expiryDate.setDate(expiryDate.getDate() + 1);
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem(EXPIRY_DATE_KEY, expiryDate.toISOString());
-        localStorage.setItem(DEVICE_ID_KEY, deviceId);
+        if (action === "login") {
+          const expiryDate = new Date();
+          expiryDate.setDate(expiryDate.getDate() + 1);
 
-        console.log("User logged in successfully");
-        navigate("/");
+          localStorage.setItem("auth_token", "true");
+          localStorage.setItem(EXPIRY_DATE_KEY, expiryDate.toISOString());
+          localStorage.setItem(DEVICE_ID_KEY, deviceId);
+
+          console.log("User logged in successfully");
+          navigate("/");
+        } else {
+          // If registration is successful, switch to login mode
+          reset();
+          setIsRegistering(false);
+          toast.info("Please login with your new credentials.");
+        }
       } else {
-        toast.error(responseMessage);
+        toast.error(response.message || "Login failed");
       }
     } catch (error) {
       toast.error("An unexpected error occurred");
@@ -177,3 +179,4 @@ export default function SingleUserAuthUI() {
     </div>
   );
 }
+

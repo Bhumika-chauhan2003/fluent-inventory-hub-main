@@ -3,9 +3,10 @@ import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
 import { StoreProvider } from './context/StoreContext';
+
 import MainLayout from './components/layout/MainLayout';
 import Dashboard from './pages/Dashboard';
 import Inventory from './pages/Inventory';
@@ -23,9 +24,10 @@ import SupplierMaster from './pages/Masterform/SupplierMaster';
 import CustomerMaster from './pages/Masterform/CustomerMaster';
 import WarehouseMaster from './pages/Masterform/WarehouseMaster';
 import UnitMaster from './pages/Masterform/UnitMaster';
-import './i18n';
-
+import SessionCheckRedirect from './components/common/SessionCheckRedirect';
 import SessionGuard from './components/common/SessionGuard';
+
+import './i18n';
 
 const queryClient = new QueryClient();
 
@@ -38,74 +40,25 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
+              <Route path="/" element={<SessionCheckRedirect />} />
               <Route path="/login" element={<SingleUserAuthUI />} />
               <Route path="/logout" element={<Logout />} />
 
-              <Route path="/" element={
-                <SessionGuard>
-                  <MainLayout><Dashboard /></MainLayout>
-                </SessionGuard>
-              } />
-              <Route path="/inventory" element={
-                <SessionGuard>
-                  <MainLayout><Inventory /></MainLayout>
-                </SessionGuard>
-              } />
-              <Route path="/add-product" element={
-                <SessionGuard>
-                  <MainLayout><AddProduct /></MainLayout>
-                </SessionGuard>
-              } />
-              <Route path="/edit-product" element={
-                <SessionGuard>
-                  <MainLayout><EditProduct /></MainLayout>
-                </SessionGuard>
-              } />
-              <Route path="/billing" element={
-                <SessionGuard>
-                  <MainLayout><Billing /></MainLayout>
-                </SessionGuard>
-              } />
-              <Route path="/invoices" element={
-                <SessionGuard>
-                  <MainLayout><Invoices /></MainLayout>
-                </SessionGuard>
-              } />
-              {/* <Route path="/reports" element={
-                <SessionGuard>
-                  <MainLayout><Reports /></MainLayout>
-                </SessionGuard>
-              } /> */}
-              <Route path="/settings" element={
-                <SessionGuard>
-                  <MainLayout><Settings /></MainLayout>
-                </SessionGuard>
-              } />
-              <Route path="/Masterform/CategoryMaster" element={
-                <SessionGuard>
-                  <MainLayout><CategoryMaster /></MainLayout>
-                </SessionGuard>
-              } />
-              <Route path="/Masterform/SupplierMaster" element={
-                <SessionGuard>
-                  <MainLayout><SupplierMaster /></MainLayout>
-                </SessionGuard>
-              } />
-              <Route path="/Masterform/CustomerMaster" element={
-                <SessionGuard>
-                  <MainLayout><CustomerMaster /></MainLayout>
-                </SessionGuard>
-              } />
-              <Route path="/Masterform/WarehouseMaster" element={
-                <SessionGuard>
-                  <MainLayout><WarehouseMaster /></MainLayout>
-                </SessionGuard>
-              } />
-              <Route path="/Masterform/UnitMaster" element={
-                <SessionGuard>
-                  <MainLayout><UnitMaster /></MainLayout>
-                </SessionGuard>
-              } />
+              <Route path="/dashboard" element={<SessionGuard><MainLayout><Dashboard /></MainLayout></SessionGuard>} />
+              <Route path="/inventory" element={<SessionGuard><MainLayout><Inventory /></MainLayout></SessionGuard>} />
+              <Route path="/add-product" element={<SessionGuard><MainLayout><AddProduct /></MainLayout></SessionGuard>} />
+              <Route path="/edit-product" element={<SessionGuard><MainLayout><EditProduct /></MainLayout></SessionGuard>} />
+              <Route path="/billing" element={<SessionGuard><MainLayout><Billing /></MainLayout></SessionGuard>} />
+              <Route path="/invoices" element={<SessionGuard><MainLayout><Invoices /></MainLayout></SessionGuard>} />
+              <Route path="/reports" element={<SessionGuard><MainLayout><Reports /></MainLayout></SessionGuard>} />
+              <Route path="/settings" element={<SessionGuard><MainLayout><Settings /></MainLayout></SessionGuard>} />
+
+              <Route path="/Masterform/CategoryMaster" element={<SessionGuard><MainLayout><CategoryMaster /></MainLayout></SessionGuard>} />
+              <Route path="/Masterform/SupplierMaster" element={<SessionGuard><MainLayout><SupplierMaster /></MainLayout></SessionGuard>} />
+              <Route path="/Masterform/CustomerMaster" element={<SessionGuard><MainLayout><CustomerMaster /></MainLayout></SessionGuard>} />
+              <Route path="/Masterform/WarehouseMaster" element={<SessionGuard><MainLayout><WarehouseMaster /></MainLayout></SessionGuard>} />
+              <Route path="/Masterform/UnitMaster" element={<SessionGuard><MainLayout><UnitMaster /></MainLayout></SessionGuard>} />
+
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
