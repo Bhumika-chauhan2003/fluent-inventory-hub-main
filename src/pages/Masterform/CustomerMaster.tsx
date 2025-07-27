@@ -14,7 +14,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbzJtgE2o0cDAW5X3u8belaDMvkdRyyMCV7eO0F71NKSK8uYQ-bWmCroCycBwMjSWJ6UHw/exec'; // ✅ Use your Web App URL
+const API_URL = 'https://script.google.com/macros/s/AKfycbzTKMZPpZCyqmPiUmrzsu1dNUHitIJrxS4H0KoPib4jVyMDeKlmjCFccbHcNRHU6-H-BA/exec'; // ✅ Use your Web App URL
 
 const CustomerMaster: React.FC = () => {
   const { t } = useTranslation();

@@ -67,7 +67,7 @@ useEffect(() => {
         // Replace with your actual API endpoints 
         // Fetching dashboard stats cors error check  
         const statsRes = await fetch
-        ("https://cors-anywhere.herokuapp.com/https://script.google.com/macros/s/AKfycbx5pHFE0cz-80GW-_3NaP0ilnOFDdvS__PirroRT7fv0EZAZwxKo_R7kop9p71-o0GllQ/exec?action=summary");
+        ("https://script.google.com/macros/s/AKfycbzTKMZPpZCyqmPiUmrzsu1dNUHitIJrxS4H0KoPib4jVyMDeKlmjCFccbHcNRHU6-H-BA/exec?action=summary");
         const statsData = await statsRes.json();
         setDashboardStats({
           totalProducts: statsData.data.totalProducts,
