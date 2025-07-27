@@ -24,7 +24,7 @@ import SupplierMaster from './pages/Masterform/SupplierMaster';
 import CustomerMaster from './pages/Masterform/CustomerMaster';
 import WarehouseMaster from './pages/Masterform/WarehouseMaster';
 import UnitMaster from './pages/Masterform/UnitMaster';
-import SessionCheckRedirect from './components/common/SessionCheckRedirect';
+import SessionCheckRedirect from './components/common/sessionCheckRedirect';
 import SessionGuard from './components/common/SessionGuard';
 
 import './i18n';
