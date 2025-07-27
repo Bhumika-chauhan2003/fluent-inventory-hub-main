@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { toast } from 'sonner';
 
 const API_URL = '/api/macros/s/AKfycbwMCliG3Dm1QAucYCpSQOm7jMXz33eNeGSCG0FnnKHud86T3F-nzpDc8cwlV71SFFKIBw/exec';
 
@@ -63,6 +64,7 @@ const CategoryMaster: React.FC = () => {
 
       const result = await res.json();
       if (result.success) {
+        toast.success(editMode ? t('CategoryForm.UpdateSuccess') : t('CategoryForm.AddSuccess'));
         setNewCategory('');
         setEditMode(false);
         setEditId(null);
@@ -80,6 +82,7 @@ const CategoryMaster: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
+    debugger;
     const confirmDelete = window.confirm(t('CategoryForm.confirmDelete'));
     if (!confirmDelete) return;
 

@@ -20,6 +20,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar, sidebarOpen }) => {
   const [userInfo, setUserInfo] = useState<{ username?: string; expiring?: string }>({});
 
   useEffect(() => {
+    debugger;
     const fetchUserInfo = async () => {
       try {
         const response = await fetch(

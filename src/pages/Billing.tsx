@@ -32,6 +32,7 @@ import {
 import { Trash2, PlusCircle } from "lucide-react";
 import ReactSelect from "react-select";
 import logo from "../assets/images/logo.png";
+import { toast } from "sonner";
 
 const Billing: React.FC = () => {
   const { t } = useTranslation();
@@ -201,7 +202,7 @@ if (!product) return;
       }
 
       setinvoicenumber(generatedNumber);
-      alert("Invoice saved successfully!");
+      toast.success(t("billing.invoicegenerated"));
     } catch (error) {
       console.error("Error saving invoice:", error);
       alert("Network or server error. Please try again.");
@@ -256,7 +257,8 @@ const printSavedInvoice = (invoice: any) => {
       Total: "",
     }),
   ];
-
+console.log("Padded items for printing:", paddedItems);
+  console.log("Invoice data for printing:", invoice);
   printWindow.document.open();
   printWindow.document.write(`
 <!DOCTYPE html>
@@ -346,8 +348,8 @@ const printSavedInvoice = (invoice: any) => {
               : ""
           }</td>
           <td class="text-right">${
-            item.Discount !== undefined && item.Discount !== ""
-              ? Number(item.discount).toFixed(2)
+            item.ProductName && invoice.Discount !== undefined && invoice.Discount !== ""
+              ? Number(invoice.Discount).toFixed(2)
               : ""
           }</td>
           <td class="text-right">${
@@ -382,7 +384,7 @@ const printSavedInvoice = (invoice: any) => {
         <td>${
           item.Price != null ? `$${Number(item.Price).toFixed(2)}` : ""
         }</td>
-        <td>${item.discount ? Number(item.discount).toFixed(2) : ""}</td>
+        <td>${invoice.Discount ? Number(invoice.Discount).toFixed(2) : ""}</td>
        
         <td></td><td></td><td></td><td></td><td></td><td></td>
       </tr>

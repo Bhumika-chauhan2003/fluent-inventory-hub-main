@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { toast } from "sonner";
 
 const API_URL =
   "/api/macros/s/AKfycbwMCliG3Dm1QAucYCpSQOm7jMXz33eNeGSCG0FnnKHud86T3F-nzpDc8cwlV71SFFKIBw/exec";
@@ -41,6 +42,7 @@ const SupplierMaster: React.FC = () => {
   };
 
   const handleSaveSupplier = async () => {
+    debugger;
     if (!supplierName.trim()) return;
 
     const payload = editMode
@@ -49,14 +51,14 @@ const SupplierMaster: React.FC = () => {
           action: "update",
           id: editId,
           Supplier_Name: supplierName.trim(),
-          Supplier_Contect: contactSupplier.trim(),
+          Supplier_Contect: contactSupplier,
           modifiedBy: "1",
         }
       : {
           entity: "Supplier",
           action: "insert",
           Supplier_Name: supplierName.trim(),
-          Supplier_Contect: contactSupplier.trim(),
+          Supplier_Contect: contactSupplier,
           addedBy: "1",
         };
 
@@ -69,6 +71,7 @@ const SupplierMaster: React.FC = () => {
 
       const result = await res.json();
       if (result.success) {
+        toast.success(editMode ? t("supplier.UpdateSuccess") : t("supplier.AddSuccess"));
         setSupplierName("");
         setContactSupplier("");
         setEditMode(false);
@@ -88,6 +91,7 @@ const SupplierMaster: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
+    debugger;
     const confirmDelete = window.confirm(t("confirmDelete"));
     if (!confirmDelete) return;
 
@@ -107,6 +111,7 @@ const SupplierMaster: React.FC = () => {
 
       const result = await res.json();
       if (result.success) {
+        toast.success(t("supplier.DeleteSuccess"));
         fetchSuppliers();
       }
     } catch (err) {
@@ -181,7 +186,7 @@ const SupplierMaster: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {suppliers.map((supplier) => (
                   <div
-                    key={supplier.Supplier_Id}
+                    key={supplier.Supplier_ID}
                     className="flex justify-between items-center p-3 bg-gray-50 rounded-md"
                   >
                     <div>
@@ -195,7 +200,7 @@ const SupplierMaster: React.FC = () => {
                       <Button variant="outline" size="sm" onClick={() => handleEdit(supplier)}>
                         {t("supplier.Edit")}
                       </Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleDelete(supplier.Supplier_Id)}>
+                      <Button variant="ghost" size="sm" onClick={() => handleDelete(supplier.Supplier_ID)}>
                         {t("supplier.Delete")}
                       </Button>
                     </div>

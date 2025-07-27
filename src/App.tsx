@@ -71,11 +71,11 @@ const App = () => (
                   <MainLayout><Invoices /></MainLayout>
                 </SessionGuard>
               } />
-              <Route path="/reports" element={
+              {/* <Route path="/reports" element={
                 <SessionGuard>
                   <MainLayout><Reports /></MainLayout>
                 </SessionGuard>
-              } />
+              } /> */}
               <Route path="/settings" element={
                 <SessionGuard>
                   <MainLayout><Settings /></MainLayout>
