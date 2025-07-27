@@ -9,7 +9,7 @@ const SessionGuard = ({ children }: { children: React.ReactNode }) => {
     const checkExpiry = async () => {
       try {
         const response = await fetch(
-          '/api/macros/s/AKfycbxMZsH-pM2tebJTnpeDkEXPysA4ArFpGe8XZSJhp3dNiQXl5Mbam7u6x8qvqja1RQy1/exec',
+          'https://script.google.com/macros/s/AKfycbwTf71UTfGGZJgZ5RYpjQAzWB_DftIDw5u-Mhez8kHaha6Xtuwq6OaL_QtbPOroWOVF/exec',
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
