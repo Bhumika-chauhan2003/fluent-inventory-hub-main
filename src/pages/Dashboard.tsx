@@ -67,7 +67,7 @@ useEffect(() => {
         // Replace with your actual API endpoints 
         // Fetching dashboard stats cors error check  
         const statsRes = await fetch
-        ("https://script.google.com/macros/s/AKfycbzTKMZPpZCyqmPiUmrzsu1dNUHitIJrxS4H0KoPib4jVyMDeKlmjCFccbHcNRHU6-H-BA/exec?action=summary");
+        ("https://script.google.com/macros/s/AKfycbzxJUc4GBGc88LF-enlrIyg6vd2P8IMBnDDd4IOhZfTIz33V8BGHKmDJ3vFLnQvRUyDog/exec?action=summary");
         const statsData = await statsRes.json();
         setDashboardStats({
           totalProducts: statsData.data.totalProducts,
@@ -141,7 +141,7 @@ useEffect(() => {
   const handleExport = async () => {
   try {
     // Step 1: Fetch product data from the API
-    const response = await fetch(`https://script.google.com/macros/s/AKfycbzJtgE2o0cDAW5X3u8belaDMvkdRyyMCV7eO0F71NKSK8uYQ-bWmCroCycBwMjSWJ6UHw/exec?action=product`);
+    const response = await fetch(`https://script.google.com/macros/s/AKfycbzxJUc4GBGc88LF-enlrIyg6vd2P8IMBnDDd4IOhZfTIz33V8BGHKmDJ3vFLnQvRUyDog/exec?action=product`);
     const result = await response.json();
 console.log("Fetched products:", result);
     if (!result?.success || !Array.isArray(result?.data)) {

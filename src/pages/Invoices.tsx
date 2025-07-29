@@ -298,7 +298,7 @@ printWindow.document.write(`
     console.log("Fetching invoices...");
     try {
       const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbzJtgE2o0cDAW5X3u8belaDMvkdRyyMCV7eO0F71NKSK8uYQ-bWmCroCycBwMjSWJ6UHw/exec?action=Invoicetstenew'
+        'https://script.google.com/macros/s/AKfycbzxJUc4GBGc88LF-enlrIyg6vd2P8IMBnDDd4IOhZfTIz33V8BGHKmDJ3vFLnQvRUyDog/exec?action=Invoicetstenew'
       );
       const data = await response.json();
       console.log("Fetched Invoices:", data);
@@ -321,7 +321,7 @@ const handleDeleteConfirm = async () => {
     if (!invoiceToDelete) return;
 console.log("Deleting product:", invoiceToDelete);
   try {
-    const res = await fetch(`https://script.google.com/macros/s/AKfycbzJtgE2o0cDAW5X3u8belaDMvkdRyyMCV7eO0F71NKSK8uYQ-bWmCroCycBwMjSWJ6UHw/exec?action=deleteinvoice&InvoiceNumber=${invoiceToDelete}`, {
+    const res = await fetch(`https://script.google.com/macros/s/AKfycbzxJUc4GBGc88LF-enlrIyg6vd2P8IMBnDDd4IOhZfTIz33V8BGHKmDJ3vFLnQvRUyDog/exec?action=deleteinvoice&InvoiceNumber=${invoiceToDelete}`, {
       method: "GET",
     });
 

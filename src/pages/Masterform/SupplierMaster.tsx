@@ -15,7 +15,7 @@ import {
 import { toast } from "sonner";
 
 const API_URL =
-  "https://script.google.com/macros/s/AKfycbzJtgE2o0cDAW5X3u8belaDMvkdRyyMCV7eO0F71NKSK8uYQ-bWmCroCycBwMjSWJ6UHw/exec";
+  "https://script.google.com/macros/s/AKfycbzxJUc4GBGc88LF-enlrIyg6vd2P8IMBnDDd4IOhZfTIz33V8BGHKmDJ3vFLnQvRUyDog/exec";
 
 const SupplierMaster: React.FC = () => {
     const { t } = useTranslation();

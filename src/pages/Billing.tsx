@@ -62,7 +62,7 @@ const Billing: React.FC = () => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "https://script.google.com/macros/s/AKfycbzJtgE2o0cDAW5X3u8belaDMvkdRyyMCV7eO0F71NKSK8uYQ-bWmCroCycBwMjSWJ6UHw/exec?action=product"
+          "https://script.google.com/macros/s/AKfycbzxJUc4GBGc88LF-enlrIyg6vd2P8IMBnDDd4IOhZfTIz33V8BGHKmDJ3vFLnQvRUyDog/exec?action=product"
         );
         const data = await response.json();
         setProducts(data.data || []);
@@ -79,7 +79,7 @@ const Billing: React.FC = () => {
     const fetchCustomers = async () => {
       try {
         const res = await fetch(
-          "https://script.google.com/macros/s/AKfycbzJtgE2o0cDAW5X3u8belaDMvkdRyyMCV7eO0F71NKSK8uYQ-bWmCroCycBwMjSWJ6UHw/exec?action=list&entity=Customer&active=1"
+          "https://script.google.com/macros/s/AKfycbzxJUc4GBGc88LF-enlrIyg6vd2P8IMBnDDd4IOhZfTIz33V8BGHKmDJ3vFLnQvRUyDog/exec?action=list&entity=Customer&active=1"
         );
         const data = await res.json();
         setCustomers(data || []);
@@ -187,7 +187,7 @@ if (!product) return;
   
     try {
       const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbzJtgE2o0cDAW5X3u8belaDMvkdRyyMCV7eO0F71NKSK8uYQ-bWmCroCycBwMjSWJ6UHw/exec",
+        "https://script.google.com/macros/s/AKfycbzxJUc4GBGc88LF-enlrIyg6vd2P8IMBnDDd4IOhZfTIz33V8BGHKmDJ3vFLnQvRUyDog/exec",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -218,7 +218,7 @@ if (!product) return;
 
     try {
       const response = await fetch(
-        `https://script.google.com/macros/s/AKfycbzJtgE2o0cDAW5X3u8belaDMvkdRyyMCV7eO0F71NKSK8uYQ-bWmCroCycBwMjSWJ6UHw/exec?action=Invoicetstenew&InvoiceNumber=${invoiceNumber}`
+        `https://script.google.com/macros/s/AKfycbzxJUc4GBGc88LF-enlrIyg6vd2P8IMBnDDd4IOhZfTIz33V8BGHKmDJ3vFLnQvRUyDog/exec?action=Invoicetstenew&InvoiceNumber=${invoiceNumber}`
       );
       const result = await response.json();
 
