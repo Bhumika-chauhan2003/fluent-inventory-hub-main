@@ -12,9 +12,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
-const API_URL =
-  "/api/macros/s/AKfycbwMCliG3Dm1QAucYCpSQOm7jMXz33eNeGSCG0FnnKHud86T3F-nzpDc8cwlV71SFFKIBw/exec";
+import { toast } from "sonner";
+ 
+const API_URL =  import.meta.env.API_URL;
 
 const SupplierMaster: React.FC = () => {
     const { t } = useTranslation();

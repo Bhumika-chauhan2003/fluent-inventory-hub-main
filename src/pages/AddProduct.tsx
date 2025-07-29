@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import ReactSelect from "react-select";
-
+ 
 const formSchema = z.object({
   productName: z.string().min(2, "Product name must be at least 2 characters"),
   specification: z.string().min(2, "Specification must be at least 2 characters"),
@@ -102,7 +102,7 @@ console.log("Form default values:", form.getValues());
   React.useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const baseUrl = "/api/macros/s/AKfycbzvyGYf3FK_rVXPduFMPzkZJFJbewBsZPYDZEJr9pp7bORq-ooQb-1ahHHoBTojrIk24Q/exec";
+        const baseUrl =  import.meta.env.API_URL;
         const [catRes, supRes, unitRes, wareRes] = await Promise.all([
           fetch(`${baseUrl}?entity=Category&action=list&active=1`),
           fetch(`${baseUrl}?action=list&entity=Supplier`),
@@ -156,7 +156,7 @@ console.log("Payload to be sent:", payload);
     try {
       debugger;
       await fetch(
-        "/api/macros/s/AKfycbxNIi6Oc_4qGN-EmmoLG6IfTtnWfcRjC_uXsxfROu-VYTc5iR0kaxmm69yubJw1X747cw/exec?action=product",
+        "API_URL?action=product",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

@@ -11,9 +11,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useTranslation } from "@/hooks/useTranslationWrapper";
-
-const API_URL =
-  "/api/macros/s/AKfycbzFou43taQuWEhZUDSUOZhYmDnyE1zIq8eKWpDI5fgzqUOSut-aXhv99QHwt-9Iq3K_/exec";
+import { toast } from "sonner";
+ 
+const API_URL =  import.meta.env.API_URL;
 
 const WarehouseMaster: React.FC = () => {
   const { t } = useTranslation();

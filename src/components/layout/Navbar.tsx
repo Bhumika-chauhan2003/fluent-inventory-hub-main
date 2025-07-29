@@ -19,39 +19,85 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar, sidebarOpen }) => {
 
   const [userInfo, setUserInfo] = useState<{ username?: string; expiring?: string }>({});
 
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const response = await fetch(
-          '/api/macros/s/AKfycbxMZsH-pM2tebJTnpeDkEXPysA4ArFpGe8XZSJhp3dNiQXl5Mbam7u6x8qvqja1RQy1/exec',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'acpplication/json' },
-            body: JSON.stringify({ action: 'getUserInfo' })
-          }
-        );
+//   useEffect(() => {
+//     const fetchUserInfo = async () => {
+//       debugger;
+//       try {
+//         debugger;
+//         const response = await fetch(
+//           '/api/macros/s/AKfycbwnlAY2MKqe32I3-Uzjig-ZE5EFi3QHHbeYDSuGxNUDzjBdVD-nF2jA4LymT90O8fQe/exec',
+//           {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'acpplication/json' },
+//             body: JSON.stringify({ action: 'getUserInfo' })
+//           }
+//         );
 
-        const data = await response.json();
+//         const data = await response.json();
+// console.log('User Info:', data);
+//         const formatDate = (isoDate: string) => {
+//           const date = new Date(isoDate);
+//           const day = String(date.getDate()).padStart(2, '0');
+//           const month = String(date.getMonth() + 1).padStart(2, '0');
+//           const year = date.getFullYear();
+//           return `${day}-${month}-${year}`;
+//         };
 
-        const formatDate = (isoDate: string) => {
-          const date = new Date(isoDate);
-          const day = String(date.getDate()).padStart(2, '0');
-          const month = String(date.getMonth() + 1).padStart(2, '0');
-          const year = date.getFullYear();
-          return `${day}-${month}-${year}`;
-        };
+//         setUserInfo({
+//           username: data.username,
+//           expiring: data.expiring ? formatDate(data.expiring) : undefined,
+//         });
+//       } catch (error) {
+//         console.error('Failed to fetch user info', error);
+//       }
+//     };
 
-        setUserInfo({
-          username: data.username,
-          expiring: data.expiring ? formatDate(data.expiring) : undefined,
-        });
-      } catch (error) {
-        console.error('Failed to fetch user info', error);
+//     fetchUserInfo();
+//   }, []);
+
+useEffect(() => {
+  const fetchUserInfo = async () => {
+    try {
+      const deviceId = localStorage.getItem("deviceId");
+
+      if (!deviceId) {
+        console.warn("Device ID not found");
+        return;
       }
-    };
 
-    fetchUserInfo();
-  }, []);
+      const response = await fetch(
+        `${import.meta.env.VITE_LOGIN_URL}?device=${deviceId}`,
+        
+        {
+          method: 'GET',
+          // ❌ Do NOT include unnecessary headers unless required
+         // headers: { 'Content-Type': 'application/json' },
+        }
+      );
+
+      const data = await response.json();
+      console.log('User Info:', data);
+
+      const formatDate = (isoDate: string) => {
+        const date = new Date(isoDate);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+      };
+
+      setUserInfo({
+        username: data.username,
+        expiring: data.expiring ? formatDate(data.expiring) : undefined,
+      });
+    } catch (error) {
+      console.error('Failed to fetch user info', error);
+    }
+  };
+
+  fetchUserInfo();
+}, []);
+
 
   const handleLogout = () => {
     const keysToRemove = [

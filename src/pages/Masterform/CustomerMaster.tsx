@@ -12,8 +12,9 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
-const API_URL = '/api/macros/s/AKfycbwMCliG3Dm1QAucYCpSQOm7jMXz33eNeGSCG0FnnKHud86T3F-nzpDc8cwlV71SFFKIBw/exec'; // ✅ Use your Web App URL
+import { toast } from 'sonner';
+ 
+const API_URL =  import.meta.env.API_URL;
 
 const CustomerMaster: React.FC = () => {
   const { t } = useTranslation();
@@ -46,7 +47,7 @@ const CustomerMaster: React.FC = () => {
     debugger;
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}?entity=Customer&action=list&active=1`);
+      const res = await fetch(import.meta.env.API_URL+`?entity=Customer&action=list&active=1`);
       const data = await res.json();
       console.log('Fetched customers:', data);
       setCustomerList(data);
@@ -84,7 +85,7 @@ const CustomerMaster: React.FC = () => {
         };
 
     try {
-      const res = await fetch(API_URL, {
+      const res = await fetch(import.meta.env.API_URL, {
         method: 'POST',
         body: JSON.stringify(payload),
         headers: { 'Content-Type': 'application/json' },
@@ -129,12 +130,12 @@ const CustomerMaster: React.FC = () => {
       ModifiedBy: '1',
     };
 
-    try {
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-        headers: { 'Content-Type': 'application/json' },
-      });
+  try {
+    const res = await fetch(import.meta.env.API_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: { 'Content-Type': 'application/json' },
+    });
 
       const result = await res.json();
       if (result.success) {

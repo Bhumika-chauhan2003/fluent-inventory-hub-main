@@ -25,6 +25,7 @@ import AiInsights from '@/components/dashboard/AiInsights';
 import BillGenerator from '@/components/dashboard/BillGenerator';
 import ImportDialog from '@/components/inventory/ImportDialog';
 import { checkSessionAndDevice } from "@/lib/utils";
+ 
 const Dashboard: React.FC = () => {
 
   const { t } = useTranslation();
@@ -66,7 +67,8 @@ useEffect(() => {
       try {
         // Replace with your actual API endpoints
         const statsRes = await fetch
-        ("/api/macros/s/AKfycbwMCliG3Dm1QAucYCpSQOm7jMXz33eNeGSCG0FnnKHud86T3F-nzpDc8cwlV71SFFKIBw/exec?action=summary");
+        ( import.meta.env.API_URL+`?action=summary`);
+        console.log("Fetched stats:", statsRes);
         const statsData = await statsRes.json();
         setDashboardStats({
           totalProducts: statsData.data.totalProducts,
@@ -140,7 +142,7 @@ useEffect(() => {
   const handleExport = async () => {
   try {
     // Step 1: Fetch product data from the API
-    const response = await fetch(`/api/macros/s/AKfycbwbuRL93F1StcFaduUxPacrAa3uoo-NNsM7xpHfmi128n9ClEVO8MRI8M4Z81QNiJlr1g/exec?action=product`);
+    const response = await fetch( import.meta.env.API_URL+`?action=product`);
     const result = await response.json();
 console.log("Fetched products:", result);
     if (!result?.success || !Array.isArray(result?.data)) {

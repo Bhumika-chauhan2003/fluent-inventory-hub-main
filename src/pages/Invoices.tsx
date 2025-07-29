@@ -200,7 +200,7 @@ const handlePrint = () => {
   const fetchInvoices = useCallback(async () => {
     try {
       const response = await fetch(
-        '/api/macros/s/AKfycbya0dPsiaDiX8qgb19w5NDek4Lp5FdiXMDscQIQ7LtR4bO26wQE-FgcP6-43P9-y0FbzQ/exec?action=invoice'
+         import.meta.env.API_URL+'?action=Invoicetstenew'
       );
       const data = await response.json();
       if (data.success && Array.isArray(data.data)) {
@@ -222,7 +222,7 @@ const handleDeleteConfirm = async () => {
     if (!invoiceToDelete) return;
 console.log("Deleting product:", invoiceToDelete);
   try {
-    const res = await fetch(`/api/macros/s/AKfycbya0dPsiaDiX8qgb19w5NDek4Lp5FdiXMDscQIQ7LtR4bO26wQE-FgcP6-43P9-y0FbzQ/exec?action=deleteinvoice&InvoiceNumber=${invoiceToDelete}`, {
+    const res = await fetch( import.meta.env.API_URL+`?action=deleteinvoice&InvoiceNumber=${invoiceToDelete}`, {
       method: "GET",
     });
 
