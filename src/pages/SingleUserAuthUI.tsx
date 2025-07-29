@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 
 // ✅ Replace this with your full deployed Google Apps Script Web App URL
@@ -36,13 +36,11 @@ function getStaticDeviceId() {
 
 // ✅ API request to register/login user
 async function authenticateUser(
-
   action: "register" | "login",
   username: string,
   password: string,
   device: string
 ) {
-   const navigate = useNavigate();
   const formData = new URLSearchParams();
   formData.append("action", action);
   formData.append("username", username);
@@ -59,12 +57,6 @@ async function authenticateUser(
     });
 
     const data = await response.json(); // Google Apps Script must return JSON
-    console.log(`Response from ${action}User:`, data);
-    if(data.length === 0 || !data.success || !data) {
-      
-      navigate("/login");
-      return { success: false, message: "Invalid response from server" };
-    }
     return data;
   } catch (error) {
     console.error(`Error in ${action}User:`, error);
@@ -187,4 +179,3 @@ export default function SingleUserAuthUI() {
     </div>
   );
 }
-
