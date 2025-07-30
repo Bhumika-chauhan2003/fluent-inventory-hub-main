@@ -62,36 +62,46 @@ const [dashboardStats, setDashboardStats] = useState({
   //   }));
 
 useEffect(() => {
-  debugger;
-    const fetchDashboardData = async () => {
-      try {
-  const statsRes = await fetch(`${import.meta.env.VITE_API_URL}?action=summary`);
+  const fetchDashboardData = async () => {
+    try {
+      console.log("Before___________________________________");
 
-  if (!statsRes.ok) {
-    throw new Error(`Failed to fetch stats: ${statsRes.status}`);
-  }
+      const url = `${import.meta.env.VITE_API_URL}?action=summary`;
+      console.log("Fetching:", url);
 
-  const statsData = await statsRes.json();
-  console.log("Fetched stats:", statsData);
+      const statsRes = await fetch(url, {
+        method: 'GET',
+        // ⚠️ Do NOT add custom headers like 'Content-Type' to avoid preflight
+      });
 
-  setDashboardStats({
-    totalProducts: statsData.data.totalProducts,
-    lowStockItems: statsData.data.lowStockItems,
-    totalInventoryValue: statsData.data.totalInventoryValue,
-    totalSales: statsData.data.totalSales,
-    recentActivity: statsData.data.recentActivity,
-  });
+      console.log("Stats Response:", statsRes);
 
-  console.log("Dashboard Stats:", statsData);
-}
- catch (error) {
-        console.error('Failed to fetch dashboard data:', error);
-      } finally {
-        setLoading(false);
+      if (!statsRes.ok) {
+        throw new Error(`Failed to fetch stats: ${statsRes.status}`);
       }
-    };
-    fetchDashboardData();
-  }, []);
+
+      const statsData = await statsRes.json();
+      console.log("Fetched stats:", statsData);
+
+      setDashboardStats({
+        totalProducts: statsData.data.totalProducts,
+        lowStockItems: statsData.data.lowStockItems,
+        totalInventoryValue: statsData.data.totalInventoryValue,
+        totalSales: statsData.data.totalSales,
+        recentActivity: statsData.data.recentActivity,
+      });
+
+      console.log("Dashboard Stats:", statsData);
+    } catch (error) {
+      console.error('Failed to fetch dashboard data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchDashboardData();
+}, []);
+
 
   if (loading) {
     return <div>Loading...</div>;

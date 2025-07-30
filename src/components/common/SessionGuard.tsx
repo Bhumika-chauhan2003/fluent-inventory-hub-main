@@ -8,8 +8,9 @@ const SessionGuard = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const checkExpiry = async () => {
       try {
+        console.log("CheckExiryURL********",import.meta.env.VITE_LOGIN_URL)
         const response = await fetch(
-          '/api/macros/s/AKfycbxMZsH-pM2tebJTnpeDkEXPysA4ArFpGe8XZSJhp3dNiQXl5Mbam7u6x8qvqja1RQy1/exec',
+          import.meta.env.VITE_LOGIN_URL,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
