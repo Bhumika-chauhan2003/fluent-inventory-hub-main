@@ -50,7 +50,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
   { path: '/add-product', icon: <PlusCircle size={20} />, label: t('nav.addProduct') },
   { path: '/billing', icon: <Receipt size={20} />, label: t('nav.billing') },
   { path: '/invoices', icon: <FileText size={20} />, label: t('nav.invoices') },
-  { path: '/reports', icon: <BarChart3 size={20} />, label: t('nav.reports') },
+  // { path: '/reports', icon: <BarChart3 size={20} />, label: t('nav.reports') },
   { path: '/settings', icon: <Settings size={20} />, label: t('nav.settings') },
   ];
 

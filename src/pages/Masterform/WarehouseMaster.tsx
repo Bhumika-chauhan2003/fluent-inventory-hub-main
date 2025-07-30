@@ -66,6 +66,7 @@ const WarehouseMaster: React.FC = () => {
 
       const result = await res.json();
       if (result.success) {
+        toast.success(editMode ? t("warehouse.updateSuccess") : t("warehouse.addSuccess"));
         setWarehouse_Name("");
         setWarehouse_Location("");
         setEditMode(false);
@@ -104,6 +105,7 @@ const WarehouseMaster: React.FC = () => {
 
       const result = await res.json();
       if (result.success) {
+        toast.success(t("warehouse.deleteSuccess"));
         fetchWarehouse();
       }
     } catch (err) {

@@ -1,25 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { Form, useNavigate } from 'react-router-dom';
-import { useTranslation } from '@/hooks/useTranslationWrapper';
-import { useStore } from '@/context/StoreContext';
-import PageHeader from '@/components/common/PageHeader';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@/hooks/useTranslationWrapper";
+import { useStore } from "@/context/StoreContext";
+import PageHeader from "@/components/common/PageHeader";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Invoice } from "@/types";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -27,24 +28,25 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Trash2, PlusCircle } from 'lucide-react';
-import { Controller } from 'react-hook-form';
-import { FormItem } from '@/components/ui/form';
+} from "@/components/ui/table";
+import { Trash2, PlusCircle } from "lucide-react";
 import ReactSelect from "react-select";
+import logo from "../assets/images/logo.png";
+import { toast } from "sonner";
 
 const Billing: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { addInvoice } = useStore();
 
-  const [customerName, setCustomerName] = useState('');
-  const [customerContact, setCustomerContact] = useState('');
-  const [customerAddress, setCustomerAddress] = useState('');
-  const [selectedNif, setSelectedNif] = useState('');
+  const [customerName, setCustomerName] = useState("");
+  const [customerContact, setCustomerContact] = useState("");
+  const [customerAddress, setCustomerAddress] = useState("");
+  const [invoiceNumber, setinvoicenumber] = useState("");
+  const [selectedNif, setSelectedNif] = useState("");
   const [customers, setCustomers] = useState<any[]>([]);
   const [loadingCustomers, setLoadingCustomers] = useState(true);
-
+  const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
   const [items, setItems] = useState<any[]>([]);
   const [discount, setDiscount] = useState(0);
   const [tax, setTax] = useState(0);
@@ -58,6 +60,7 @@ const Billing: React.FC = () => {
  
 const API_URL =  import.meta.env.VITE_API_URL;
 console.log("API URL:", API_URL);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -67,8 +70,7 @@ console.log("API URL:", API_URL);
         const data = await response.json();
         setProducts(data.data || []);
       } catch (error) {
-        console.error('Error fetching products:', error);
-        setProducts([]);
+        console.error("Error fetching products:", error);
       } finally {
         setLoadingProducts(false);
       }
@@ -76,20 +78,16 @@ console.log("API URL:", API_URL);
     fetchProducts();
   }, []);
 
-  // Fetch customers
   useEffect(() => {
     const fetchCustomers = async () => {
-      debugger;
       try {
         const res = await fetch(
            import.meta.env.VITE_API_URL+"?action=list&entity=Customer&active=1"
         );
         const data = await res.json();
-        console.log('Fetched customers:', data);
         setCustomers(data || []);
-        console.log('Fetched customers:', data);
       } catch (error) {
-        console.error('Error fetching customers:', error);
+        console.error("Error fetching customers:", error);
       } finally {
         setLoadingCustomers(false);
       }
@@ -101,17 +99,10 @@ console.log("API URL:", API_URL);
   // let totalDiscount = discount;
   // let totalTax = (subtotal - totalDiscount) * (tax / 100);
   // let grandTotal = subtotal - totalDiscount + totalTax;
-
   const handleAddItem = () => {
     setItems([
       ...items,
-      {
-        productId: '',
-        productName: '',
-        quantity: 1,
-        price: 0,
-        total: 0,
-      },
+      { productId: "", productName: "", quantity: 1, price: 0, total: 0 },
     ]);
   };
 
@@ -127,40 +118,44 @@ console.log("API URL:", API_URL);
       price: product.sellingPrice || 0,
       total: (product.sellingPrice || 0) * updatedItems[index].quantity,
     };
-
     setItems(updatedItems);
   };
 
   const handleQuantityChange = (index: number, quantity: number) => {
     const updatedItems = [...items];
-    const product = products.find(p => p.productid === updatedItems[index].productId);
-    if (product && quantity > product.RemaningProduct) {
+    const product = products.find(
+      (p) => p.productid === updatedItems[index].productId
+    );
+if (!product) return;
+
+  // If the product is out of stock
+  if (product.RemaningProduct === 0) {
+    updatedItems[index] = {
+      ...updatedItems[index],
+      quantity: 0,
+      price: 0,
+      total: 0,
+    };
+  } else {
+    // If entered quantity exceeds available stock
+    if (quantity > product.RemaningProduct) {
       quantity = product.RemaningProduct;
     }
 
     updatedItems[index] = {
       ...updatedItems[index],
-      quantity: quantity,
+      quantity,
       total: updatedItems[index].price * quantity,
     };
-    setItems(updatedItems);
+  }
+
+  setItems(updatedItems);
   };
 
   const handleRemoveItem = (index: number) => {
     const updatedItems = [...items];
     updatedItems.splice(index, 1);
     setItems(updatedItems);
-  };
-
-  const handleNifSelect = (nif: string) => {
-    debugger;
-    setSelectedNif(nif);
-    const selected = customers.find(c => c.Customer_Nif === nif);
-    if (selected) {
-      setCustomerName(selected.Customer_Name || '');
-      setCustomerContact(selected.Customer_ContectNo || '');
-      setCustomerAddress(selected.Customer_Adders || '');
-    }
   };
 
   const handleGenerateInvoice = async () => {
@@ -207,13 +202,16 @@ console.log("API URL:", API_URL);
         }
       );
       const result = await response.json();
+
       if (!result.success) {
         alert(result.message || "Failed to save invoice.");
         return;
       }
-      navigate('/invoices');
+
+      setinvoicenumber(generatedNumber);
+      toast.success(t("billing.invoicegenerated"));
     } catch (error) {
-      console.error('Error saving invoice:', error);
+      console.error("Error saving invoice:", error);
       alert("Network or server error. Please try again.");
     }
   };
@@ -433,54 +431,54 @@ console.log("Padded items for printing:", paddedItems);
 
   return (
     <div>
-      <PageHeader title={t('billing.title')} />
+      <PageHeader title={t("billing.title")} />
 
+      {/* Customer Card */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Customer Card */}
         <Card>
           <CardHeader>
-            <CardTitle>{t('billing.customer')}</CardTitle>
+            <CardTitle>{t("billing.customer")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* NIF Dropdown */}
-           <div className="space-y-2">
-  <Label htmlFor="customerNif">{t('Customer Nif')}</Label>
-  <ReactSelect
-    id="customerNif"
-    options={customers.map(c => ({
-      value: c.Customer_Nif,
-      label: c.Customer_Nif,
-    }))}
-    value={
-      selectedNif
-        ? { value: selectedNif, label: selectedNif }
-        : null
-    }
-    onChange={(selectedOption) => {
-      const nif = selectedOption?.value || '';
-      setSelectedNif(nif);
-      const selected = customers.find(c => c.Customer_Nif === nif);
-      if (selected) {
-        setCustomerName(selected.Customer_Name || '');
-        setCustomerContact(selected.Customer_ContectNo || '');
-        setCustomerAddress(selected.Customer_Adders || '');
-      }
-    }}
-    isSearchable
-    placeholder={t('billing.selectCustomerNif')}
-  />
-</div>
-
             <div className="space-y-2">
-              <Label>{t('billing.customerName')}</Label>
+              <Label htmlFor="customerNif">{t("Customer Nif")}</Label>
+              <ReactSelect
+                id="customerNif"
+                options={customers.map((c) => ({
+                  value: c.Customer_Nif,
+                  label: c.Customer_Nif,
+                }))}
+                value={
+                  selectedNif
+                    ? { value: selectedNif, label: selectedNif }
+                    : null
+                }
+                onChange={(option) => {
+                  const nif = option?.value || "";
+                  setSelectedNif(nif);
+                  const selected = customers.find(
+                    (c) => c.Customer_Nif === nif
+                  );
+                  if (selected) {
+                    setCustomerName(selected.Customer_Name || "");
+                    setCustomerContact(selected.Customer_ContectNo || "");
+                    setCustomerAddress(selected.Customer_Adders || "");
+                  }
+                }}
+                isSearchable
+                placeholder={t("billing.selectCustomerNif")}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>{t("billing.customerName")}</Label>
               <Input value={customerName} readOnly />
             </div>
             <div className="space-y-2">
-              <Label>{t('billing.customerContact')}</Label>
+              <Label>{t("billing.customerContact")}</Label>
               <Input value={customerContact} readOnly />
             </div>
             <div className="space-y-2">
-              <Label>{t('billing.customerAddress')}</Label>
+              <Label>{t("billing.customerAddress")}</Label>
               <Input value={customerAddress} readOnly />
             </div>
           </CardContent>
@@ -489,36 +487,53 @@ console.log("Padded items for printing:", paddedItems);
         {/* Summary Card */}
         <Card className="md:col-span-2">
           <CardHeader>
-            <CardTitle>{t('billing.summary')}</CardTitle>
+            <CardTitle>{t("billing.summary")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex justify-between py-2 border-b">
-              <span>{t('billing.subtotal')}</span>
+              <span>{t("billing.subtotal")}</span>
               <span className="font-medium">${subtotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between items-center py-2 border-b">
-              <span>{t('billing.discount')}</span>
+              <span>{t("billing.discount")}</span>
               <div className="flex items-center gap-2">
-                <Input type="number" value={discount} onChange={(e) => setDiscount(Number(e.target.value))} className="w-24" />
-                <span className="font-medium">-${totalDiscount.toFixed(2)}</span>
+                <Input
+                  type="number"
+                  value={discount}
+                  onChange={(e) => setDiscount(Number(e.target.value))}
+                  className="w-24"
+                />
+                <span className="font-medium">
+                  -${totalDiscount.toFixed(2)}
+                </span>
               </div>
             </div>
             <div className="flex justify-between items-center py-2 border-b">
-              <span>{t('billing.tax')} (%)</span>
+              <span>{t("billing.tax")} (%)</span>
               <div className="flex items-center gap-2">
-                <Input type="number" value={tax} onChange={(e) => setTax(Number(e.target.value))} className="w-24" />
+                <Input
+                  type="number"
+                  value={tax}
+                  onChange={(e) => setTax(Number(e.target.value))}
+                  className="w-24"
+                />
                 <span className="font-medium">+${totalTax.toFixed(2)}</span>
               </div>
             </div>
             <div className="flex justify-between py-2 text-lg font-bold">
-              <span>{t('billing.grandTotal')}</span>
+              <span>{t("billing.grandTotal")}</span>
               <span>${grandTotal.toFixed(2)}</span>
             </div>
           </CardContent>
           <CardFooter className="flex justify-end space-x-2">
-            <Button variant="outline">{t('billing.printInvoice')}</Button>
-            <Button onClick={handleGenerateInvoice} disabled={items.length === 0}>
-              {t('billing.generateInvoice')}
+            <Button variant="outline" onClick={handlePrintInvoice}>
+              {t("billing.printInvoice")}
+            </Button>
+            <Button
+              onClick={handleGenerateInvoice}
+              disabled={items.length === 0}
+            >
+              {t("billing.generateInvoice")}
             </Button>
           </CardFooter>
         </Card>
@@ -527,24 +542,27 @@ console.log("Padded items for printing:", paddedItems);
       {/* Invoice Items Table */}
       <Card className="mt-6">
         <CardHeader>
-          <CardTitle>{t('billing.items')}</CardTitle>
+          <CardTitle>{t("billing.items")}</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{t('billing.productName')}</TableHead>
-                <TableHead>{t('billing.quantity')}</TableHead>
-                <TableHead>{t('billing.price')}</TableHead>
-                <TableHead>{t('billing.total')}</TableHead>
+                <TableHead>{t("billing.productName")}</TableHead>
+                <TableHead>{t("billing.quantity")}</TableHead>
+                <TableHead>{t("billing.price")}</TableHead>
+                <TableHead>{t("billing.total")}</TableHead>
                 <TableHead className="w-[50px]"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {items.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-4 text-gray-500">
-                    {t('common.noData')}
+                  <TableCell
+                    colSpan={5}
+                    className="text-center py-4 text-gray-500"
+                  >
+                    {t("common.noData")}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -554,13 +572,23 @@ console.log("Padded items for printing:", paddedItems);
                       {loadingProducts ? (
                         <div>Loading products...</div>
                       ) : (
-                        <Select value={item.productId} onValueChange={(value) => handleProductChange(index, value)}>
+                        <Select
+                          value={item.productId}
+                          onValueChange={(value) =>
+                            handleProductChange(index, value)
+                          }
+                        >
                           <SelectTrigger>
-                            <SelectValue placeholder={t('billing.selectProduct')} />
+                            <SelectValue
+                              placeholder={t("billing.selectProduct")}
+                            />
                           </SelectTrigger>
                           <SelectContent>
                             {products.map((product) => (
-                              <SelectItem key={product.productid} value={product.productid}>
+                              <SelectItem
+                                key={product.productid}
+                                value={product.productid}
+                              >
                                 {product.productName}
                               </SelectItem>
                             ))}
@@ -569,12 +597,24 @@ console.log("Padded items for printing:", paddedItems);
                       )}
                     </TableCell>
                     <TableCell>
-                      <Input type="number" min="1" value={item.quantity} onChange={(e) => handleQuantityChange(index, Number(e.target.value))} className="w-20" />
+                      <Input
+                        type="number"
+                        min="1"
+                        value={item.quantity}
+                        onChange={(e) =>
+                          handleQuantityChange(index, Number(e.target.value))
+                        }
+                        className="w-20"
+                      />
                     </TableCell>
                     <TableCell>${item.price.toFixed(2)}</TableCell>
                     <TableCell>${item.total.toFixed(2)}</TableCell>
                     <TableCell>
-                      <Button variant="ghost" size="icon" onClick={() => handleRemoveItem(index)}>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleRemoveItem(index)}
+                      >
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </TableCell>
@@ -587,7 +627,7 @@ console.log("Padded items for printing:", paddedItems);
         <CardFooter>
           <Button variant="outline" className="w-full" onClick={handleAddItem}>
             <PlusCircle className="mr-2 h-4 w-4" />
-            {t('billing.addItem')}
+            {t("billing.addItem")}
           </Button>
         </CardFooter>
       </Card>
@@ -596,5 +636,3 @@ console.log("Padded items for printing:", paddedItems);
 };
 
 export default Billing;
-
-

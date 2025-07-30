@@ -147,7 +147,7 @@ useEffect(() => {
               <User className="h-4 w-4" />
             </div>
             <span className="hidden md:inline-block font-medium">
-           {userInfo.username?.trim().substring(0, 4) || "User"}
+          {userInfo.username?.split('@')[0].trim() || "User"}
 
             </span>
             <Button variant="ghost" size="icon" onClick={handleLogout} title="Logout">

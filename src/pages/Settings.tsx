@@ -113,10 +113,10 @@ const Settings: React.FC = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="en">{t('languages.en')}</SelectItem>
-                    <SelectItem value="hi">{t('languages.hi')}</SelectItem>
-                    <SelectItem value="bn">{t('languages.bn')}</SelectItem>
+                    {/* <SelectItem value="hi">{t('languages.hi')}</SelectItem>
+                    <SelectItem value="bn">{t('languages.bn')}</SelectItem> */}
                     <SelectItem value="es">{t('languages.es')}</SelectItem>
-                    <SelectItem value="pt">{t('languages.pt')}</SelectItem>
+                    {/* <SelectItem value="pt">{t('languages.pt')}</SelectItem> */}
                   </SelectContent>
                 </Select>
               </div>

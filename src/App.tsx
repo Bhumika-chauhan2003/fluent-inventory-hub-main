@@ -3,7 +3,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
 import { StoreProvider } from './context/StoreContext';
 
@@ -24,10 +24,10 @@ import SupplierMaster from './pages/Masterform/SupplierMaster';
 import CustomerMaster from './pages/Masterform/CustomerMaster';
 import WarehouseMaster from './pages/Masterform/WarehouseMaster';
 import UnitMaster from './pages/Masterform/UnitMaster';
-import SessionCheckRedirect from './components/common/SessionCheckRedirect';
-import SessionGuard from './components/common/SessionGuard';
 
+import SessionGuard from './components/common/SessionGuard';
 import './i18n';
+import SessionCheckRedirect from './components/common/sessionCheckRedirect';
 
 const queryClient = new QueryClient();
 
@@ -40,7 +40,7 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<SessionCheckRedirect />} />
+              <Route path="/"  element={<SessionCheckRedirect />} />
               <Route path="/login" element={<SingleUserAuthUI />} />
               <Route path="/logout" element={<Logout />} />
 
@@ -59,7 +59,7 @@ const App = () => (
               <Route path="/Masterform/WarehouseMaster" element={<SessionGuard><MainLayout><WarehouseMaster /></MainLayout></SessionGuard>} />
               <Route path="/Masterform/UnitMaster" element={<SessionGuard><MainLayout><UnitMaster /></MainLayout></SessionGuard>} />
 
-              <Route path="*" element={<NotFound />} />
+              <Route path="*" element={<Navigate to="/login" />} />
             </Routes>
           </BrowserRouter>
         </StoreProvider>

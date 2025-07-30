@@ -1,6 +1,6 @@
 // components/common/SessionGuard.tsx
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SessionGuard = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
@@ -12,20 +12,24 @@ const SessionGuard = ({ children }: { children: React.ReactNode }) => {
         const response = await fetch(
           import.meta.env.VITE_LOGIN_URL,
           {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'checkExpiry' }),
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded", // ✅ simple CORS-safe header
+            },
+            body: new URLSearchParams({
+              action: "checkExpiry",
+            }),
           }
         );
 
         const result = await response.json();
         if (result.expired) {
-          localStorage.removeItem('isLoggedIn');
-          localStorage.removeItem('expring');
-          navigate('/logout');
+          localStorage.removeItem("isLoggedIn");
+          localStorage.removeItem("expring");
+          navigate("/logout");
         }
       } catch (error) {
-        console.error('Session validation failed', error);
+        console.error("Session validation failed", error);
       }
     };
 

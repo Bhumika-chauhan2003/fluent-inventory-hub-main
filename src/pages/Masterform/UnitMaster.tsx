@@ -66,6 +66,7 @@ const UnitMaster: React.FC = () => {
 
       const result = await res.json();
       if (result.success) {
+        toast.success(editMode ? t("unit.updateSuccess") : t("unit.addSuccess"));
         setUnit_Name("");
         setUnit_Abbrevation("");
         setEditMode(false);
@@ -104,6 +105,7 @@ const UnitMaster: React.FC = () => {
 
       const result = await res.json();
       if (result.success) {
+        toast.success(t("unit.deleteSuccess"));
         fetchUnit();
       }
     } catch (err) {

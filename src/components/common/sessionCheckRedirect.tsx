@@ -5,10 +5,9 @@ import { toast } from 'sonner';
 
 const EXPIRY_DATE_KEY = 'expiryDate';
 const AUTH_TOKEN_KEY = 'auth_token';
-
 export default function SessionCheckRedirect() {
-  const navigate = useNavigate();
-
+const navigate = useNavigate();
+  
   useEffect(() => {
     const isLoggedIn = localStorage.getItem(AUTH_TOKEN_KEY);
     const expiryDate = localStorage.getItem(EXPIRY_DATE_KEY);

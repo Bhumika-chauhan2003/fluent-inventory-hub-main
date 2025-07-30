@@ -44,7 +44,9 @@
     "outOfStock": "Sin Stock",
     "export": "Exportar",
     "import": "Importar",
-    "add": "Añadir Producto"
+    "add": "Añadir Producto",
+    "openmenue": "Abrir Menú",
+    "deleteSuccess": "Producto eliminado con éxito."
   },
   "product": {
     "details": "Detalles del Producto",
@@ -93,7 +95,8 @@
     "saveInvoice": "Guardar Factura",
     "invoiceDate": "Fecha de Factura",
     "invoiceNumber": "Número de Factura",
-    "selectProduct": "Seleccionar un producto"
+    "selectProduct": "Seleccionar un producto",
+    "invoicegenerated": "Factura generada con éxito"
   },
   "invoices": {
     "title": "Facturas",
@@ -207,7 +210,10 @@
     "Loading": "Cargando...",
     "NoCustomerFound": "No se encontraron clientes.",
     "Edit": "Editar",
-    "Delete": "Eliminar"
+    "Delete": "Eliminar",
+    "AddSuccess": "Cliente agregado con éxito.",
+    "UpdateSuccess": "Cliente actualizado con éxito.",
+   "deletesuccess": "Cliente eliminado con éxito."
   },
   "CategoryForm": {
     "Category": "Categorías",
@@ -225,7 +231,9 @@
     "NoCategoryFound": "No se encontraron categorías.",
     "Edit": "Editar",
     "Delete": "Eliminar",
-    "confirmDelete": "¿Estás seguro de que quieres eliminar esta categoría?"
+    "confirmDelete": "¿Estás seguro de que quieres eliminar esta categoría?",
+    "AddSuccess": "Categoría agregada con éxito.",
+    "UpdateSuccess": "Categoría actualizada con éxito."
   },
   "supplier":{
      "AddSupplier": "Agregar Proveedor",
@@ -241,7 +249,10 @@
   "NoSuppliersFound": "No se encontraron proveedores.",
   "Edit": "Editar",
   "Delete": "Eliminar",
-  "NoContact": "Sin contacto"
+  "NoContact": "Sin contacto",
+  "AddSuccess": "Proveedor agregado con éxito.",
+  "UpdateSuccess": "Proveedor actualizado con éxito.",  
+  "DeleteSuccess": "Proveedor eliminado con éxito."
   },
 "warehouse": {
   "addTitle": "Agregar Almacén",
@@ -257,7 +268,10 @@
   "noData": "No se encontraron almacenes.",
   "edit": "Editar",
   "delete": "Eliminar",
-  "confirmDelete": "¿Estás seguro de que deseas eliminar este almacén?"
+  "confirmDelete": "¿Estás seguro de que deseas eliminar este almacén?",
+  "addSuccess": "Almacén agregado con éxito.",
+  "updateSuccess": "Almacén actualizado con éxito.",
+  "deleteSuccess": "Almacén eliminado con éxito."
 },
 "unit": {
   "addTitle": "Agregar Unidad",
@@ -274,7 +288,10 @@
   "noAbbrevation": "Sin abreviatura",
   "edit": "Editar",
   "delete": "Eliminar",
-  "confirmDelete": "¿Estás seguro de que deseas eliminar esta unidad?"
+  "confirmDelete": "¿Estás seguro de que deseas eliminar esta unidad?",
+  "addSuccess": "Unidad agregada con éxito.",
+  "updateSuccess": "Unidad actualizada con éxito.",
+  "deleteSuccess": "Unidad eliminada con éxito."
 },
   "addproduct": {
     "addTitle": "Agregar Producto",
