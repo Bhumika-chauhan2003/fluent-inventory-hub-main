@@ -31,22 +31,22 @@ import ReactSelect from "react-select";
 
 const baseUrl =  import.meta.env.VITE_API_URL;
 const formSchema = z.object({
-  productName: z.string().min(2, "Product name must be at least 2 characters"),
-  specification: z.string().min(2, "Specification must be at least 2 characters"),
+  productName: z.string().min(1, "Product Name is required"),
+  specification: z.string().min(1, "Specification is required"),
   category: z.coerce.string().min(1, "Category is required"),
   supplier: z.coerce.string().min(1, "Supplier is required"),
-  purchasePrice: z.coerce.number().positive("Must be positive"),
-  sellingPrice: z.coerce.number().positive("Must be positive"),
-  quantity: z.coerce.number().int().positive("Must be a positive integer"),
-  IVA: z.coerce.number().optional(),
-  Margin: z.coerce.number().optional(),
-  EANCode: z.string().optional(),
-  ShortCode: z.string().optional(),
-  ProductFamilyCode: z.string().optional(),
+  purchasePrice: z.coerce.number().positive("Purchase price must be greater than 0"),
+  sellingPrice: z.coerce.number().positive("Selling price must be greater than 0"),
+  quantity: z.coerce.number().int().positive("Quantity must be greater than 0"),
+  IVA: z.coerce.number().min(0, "IVA is required"),
+  Margin: z.coerce.number().min(0, "Margin is required"),
+  EANCode: z.string().min(1, "EAN Code is required"),
+  ShortCode: z.string().min(1, "Short Code is required"),
+  ProductFamilyCode: z.string().min(1, "Product Family Code is required"),
   unit: z.coerce.string().min(1, "Unit is required"),
   warehouse: z.coerce.string().min(1, "Warehouse is required"),
-  entryDate: z.date(),
-  remarks: z.string().optional(),
+  entryDate: z.date({ required_error: "Entry date is required" }),
+  remarks: z.string().min(1, "Remarks are required"),
 });
 type FormValues = z.infer<typeof formSchema>;
 
@@ -105,9 +105,9 @@ console.log("Form default values:", form.getValues());
       try {
         const [catRes, supRes, unitRes, wareRes] = await Promise.all([
           fetch(`${baseUrl}?entity=Category&action=list&active=1`),
-          fetch(`${baseUrl}?action=list&entity=Supplier`),
-          fetch(`${baseUrl}?action=list&entity=Unit`),
-          fetch(`${baseUrl}?action=list&entity=Warehouse`),
+          fetch(`${baseUrl}?action=list&entity=Supplier&active=1`),
+          fetch(`${baseUrl}?action=list&entity=Unit&active=1`),
+          fetch(`${baseUrl}?action=list&entity=Warehouse&active=1`),
         ]);
 
         const [catData, supData, unitData, wareData] = await Promise.all([
@@ -157,6 +157,7 @@ console.log("Payload to be sent:", payload);
       debugger;
       await fetch(
         `${baseUrl}?action=product`,
+
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -183,7 +184,7 @@ console.log("Payload to be sent:", payload);
                 {/* Product Name */}
                 <FormField control={form.control} name="productName" render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("addproduct.productName")}</FormLabel>
+                    <FormLabel>{t("addproduct.productName")} <span style={{ color: "red" }}>*</span></FormLabel>
                     <FormControl><Input {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
@@ -192,7 +193,7 @@ console.log("Payload to be sent:", payload);
                 {/* Specification */}
                 <FormField control={form.control} name="specification" render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("addproduct.specification")}</FormLabel>
+                    <FormLabel>{t("addproduct.specification")} <span style={{ color: "red" }}>*</span></FormLabel>
                     <FormControl><Input {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
@@ -201,7 +202,7 @@ console.log("Payload to be sent:", payload);
                 {/* Category */}
                 <Controller name="category" control={form.control} render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("addproduct.category")}</FormLabel>
+                    <FormLabel>{t("addproduct.category")} <span style={{ color: "red" }}>*</span></FormLabel>
                     <ReactSelect
                       options={categories.map(c => ({ value: c.Category_ID, label: c.categoryName }))}
                       value={categories.find(c => c.Category_ID === field.value) && { value: field.value, label: categories.find(c => c.Category_ID === field.value)?.categoryName }}
@@ -215,7 +216,7 @@ console.log("Payload to be sent:", payload);
                 {/* Supplier */}
                 <Controller name="supplier" control={form.control} render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("addproduct.supplier")}</FormLabel>
+                    <FormLabel>{t("addproduct.supplier")} <span style={{ color: "red" }}>*</span></FormLabel>
                     <ReactSelect
                       options={suppliers.map(s => ({ value: s.Supplier_ID, label: s.Supplier_Name }))}
                       value={suppliers.find(s => s.Supplier_ID === field.value) && { value: field.value, label: suppliers.find(s => s.Supplier_ID === field.value)?.Supplier_Name }}
@@ -229,7 +230,7 @@ console.log("Payload to be sent:", payload);
                 {/* Purchase Price */}
                 <FormField control={form.control} name="purchasePrice" render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("addproduct.purchasePrice")}</FormLabel>
+                    <FormLabel>{t("addproduct.purchasePrice")} <span style={{ color: "red" }}>*</span></FormLabel>
                     <FormControl><Input type="number" step="0" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
@@ -238,7 +239,7 @@ console.log("Payload to be sent:", payload);
                 {/* IVA */}
                 <FormField control={form.control} name="IVA" render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("addproduct.IVA")}</FormLabel>
+                    <FormLabel>{t("addproduct.IVA")} <span style={{ color: "red" }}>*</span></FormLabel>
                     <FormControl><Input type="number" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
@@ -247,7 +248,7 @@ console.log("Payload to be sent:", payload);
                 {/* Margin */}
                 <FormField control={form.control} name="Margin" render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("addproduct.margin")}</FormLabel>
+                    <FormLabel>{t("addproduct.margin")} <span style={{ color: "red" }}>*</span></FormLabel>
                     <FormControl><Input type="number" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
@@ -255,7 +256,7 @@ console.log("Payload to be sent:", payload);
                 {/* EAN Code */}
                 <FormField control={form.control} name="EANCode" render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("addproduct.eanCode")}</FormLabel>
+                    <FormLabel>{t("addproduct.eanCode")} <span style={{ color: "red" }}>*</span></FormLabel>
                     <FormControl><Input {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
@@ -264,7 +265,7 @@ console.log("Payload to be sent:", payload);
                 {/* Short Code */}
                 <FormField control={form.control} name="ShortCode" render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("addproduct.shortCode")}</FormLabel>
+                    <FormLabel>{t("addproduct.shortCode")} <span style={{ color: "red" }}>*</span></FormLabel>
                     <FormControl><Input {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
@@ -273,7 +274,7 @@ console.log("Payload to be sent:", payload);
                 {/* Product Family Code */}
                 <FormField control={form.control} name="ProductFamilyCode" render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("addproduct.productFamilyCode")}</FormLabel>
+                    <FormLabel>{t("addproduct.productFamilyCode")} <span style={{ color: "red" }}>*</span></FormLabel>
                     <FormControl><Input {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
@@ -281,13 +282,13 @@ console.log("Payload to be sent:", payload);
 
                 {/* Selling Price */}
                 <FormField name="sellingPrice" control={form.control} render={({ field }) => (
-                  <FormItem><FormLabel>{t("addproduct.sellingPrice")}</FormLabel><FormControl><Input {...field} readOnly /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>{t("addproduct.sellingPrice")} <span style={{ color: "red" }}>*</span></FormLabel><FormControl><Input {...field} readOnly /></FormControl><FormMessage /></FormItem>
                 )} />
 
                 {/* Quantity */}
                 <FormField control={form.control} name="quantity" render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("addproduct.quantity")}</FormLabel>
+                    <FormLabel>{t("addproduct.quantity")} <span style={{ color: "red" }}>*</span></FormLabel>
                     <FormControl><Input type="number" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
@@ -296,7 +297,7 @@ console.log("Payload to be sent:", payload);
                 {/* Unit */}
                 <Controller name="unit" control={form.control} render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("addproduct.unit")}</FormLabel>
+                    <FormLabel>{t("addproduct.unit")} <span style={{ color: "red" }}>*</span></FormLabel>
                     <ReactSelect
                       options={units.map(u => ({ value: u.Unit_Id, label: `${u.Unit_Name} (${u.Unit_Abbrevation})` }))}
                       value={units.find(u => u.Unit_Id === field.value) && { value: field.value, label: `${units.find(u => u.Unit_Id === field.value)?.Unit_Name} (${units.find(u => u.Unit_Id === field.value)?.Unit_Abbrevation})` }}
@@ -310,7 +311,7 @@ console.log("Payload to be sent:", payload);
                 {/* Warehouse */}
                 <Controller name="warehouse" control={form.control} render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("addproduct.warehouse")}</FormLabel>
+                    <FormLabel>{t("addproduct.warehouse")} <span style={{ color: "red" }}>*</span></FormLabel>
                     <ReactSelect
                       options={warehouses.map(w => ({ value: w.Warehouse_Id, label: `${w.Warehouse_Name}${w.Warehouse_Location ? ` (${w.Warehouse_Location})` : ""}` }))}
                       value={warehouses.find(w => w.Warehouse_Id === field.value) && { value: field.value, label: `${warehouses.find(w => w.Warehouse_Id === field.value)?.Warehouse_Name}${warehouses.find(w => w.Warehouse_Id === field.value)?.Warehouse_Location ? ` (${warehouses.find(w => w.Warehouse_Id === field.value)?.Warehouse_Location})` : ""}` }}
@@ -324,7 +325,7 @@ console.log("Payload to be sent:", payload);
                 {/* Entry Date */}
                 <FormField control={form.control} name="entryDate" render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>{t("addproduct.entryDate")}</FormLabel>
+                    <FormLabel>{t("addproduct.entryDate")} <span style={{ color: "red" }}>*</span></FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -352,7 +353,7 @@ console.log("Payload to be sent:", payload);
               {/* Remarks */}
               <FormField control={form.control} name="remarks" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("addproduct.remarks")}</FormLabel>
+                  <FormLabel>{t("addproduct.remarks")} <span style={{ color: "red" }}>*</span></FormLabel>
                   <FormControl>
                     <Textarea placeholder="Remarks (optional)" className="resize-none" {...field} />
                   </FormControl>

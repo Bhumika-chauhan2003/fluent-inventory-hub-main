@@ -144,6 +144,7 @@ useEffect(() => {
   const handleExport = async () => {
   try {
     // Step 1: Fetch product data from the API
+
     const response = await fetch( import.meta.env.VITE_API_URL+`?action=product`);
     const result = await response.json();
 console.log("Fetched products:", result);

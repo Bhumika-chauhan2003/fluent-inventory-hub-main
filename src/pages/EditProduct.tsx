@@ -38,22 +38,22 @@ const nonEmptyString = z
   });
 
 const formSchema = z.object({
-  productName: z.string().min(2, "Product name is required"),
-  specification: z.string().min(2, "Specification is required"),
-  Margin: z.coerce.number().optional(), // ✅ Added this line
-  category: nonEmptyString,
-  supplier: nonEmptyString,
-  purchasePrice: z.coerce.number().positive("Must be positive"),
-  sellingPrice: z.coerce.number().positive("Must be positive"),
-  quantity: z.coerce.number().int().positive("Must be a positive integer"),
-  unit: nonEmptyString,
-  warehouse: nonEmptyString,
-  IVA: z.coerce.number().optional(),
-  EANCode: z.string().optional(),
-  ShortCode: z.string().optional(),
-  ProductFamilyCode: z.string().optional(),
-  entryDate: z.date(),
-  remarks: z.string().optional(),
+  productName: z.string().min(1, "Product Name is required"),
+  specification: z.string().min(1, "Specification is required"),
+  category: z.coerce.string().min(1, "Category is required"),
+  supplier: z.coerce.string().min(1, "Supplier is required"),
+  purchasePrice: z.coerce.number().positive("Purchase price must be greater than 0"),
+  sellingPrice: z.coerce.number().positive("Selling price must be greater than 0"),
+  quantity: z.coerce.number().int().positive("Quantity must be greater than 0"),
+  IVA: z.coerce.number().min(0, "IVA is required"),
+  Margin: z.coerce.number().min(0, "Margin is required"),
+  EANCode: z.string().min(1, "EAN Code is required"),
+  ShortCode: z.string().min(1, "Short Code is required"),
+  ProductFamilyCode: z.string().min(1, "Product Family Code is required"),
+  unit: z.coerce.string().min(1, "Unit is required"),
+  warehouse: z.coerce.string().min(1, "Warehouse is required"),
+  entryDate: z.date({ required_error: "Entry date is required" }),
+  remarks: z.string().min(1, "Remarks are required"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -98,11 +98,12 @@ const AddProduct: React.FC = () => {
       try {
         const baseUrl =
           import.meta.env.VITE_API_URL;
+
         const [catRes, supRes, unitRes, wareRes] = await Promise.all([
           fetch(`${baseUrl}?entity=Category&action=list&active=1`),
-          fetch(`${baseUrl}?action=list&entity=Supplier`),
-          fetch(`${baseUrl}?action=list&entity=Unit`),
-          fetch(`${baseUrl}?action=list&entity=Warehouse`),
+          fetch(`${baseUrl}?action=list&entity=Supplier&active=1`),
+          fetch(`${baseUrl}?action=list&entity=Unit&active=1`),
+          fetch(`${baseUrl}?action=list&entity=Warehouse&active=1`),
         ]);
 
         const [catData, supData, unitData, wareData] = await Promise.all([
@@ -192,6 +193,7 @@ const AddProduct: React.FC = () => {
     try {
       const res = await fetch(
          import.meta.env.API_URL,
+
         {
           method: "POST",
           headers: {
@@ -231,7 +233,7 @@ const AddProduct: React.FC = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Product Name</FormLabel>
+                      <FormLabel>{t("addproduct.productName")} <span style={{ color: "red" }}>*</span></FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -245,7 +247,7 @@ const AddProduct: React.FC = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Specification</FormLabel>
+                      <FormLabel>{t("addproduct.specification")} <span style={{ color: "red" }}>*</span></FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -259,7 +261,7 @@ const AddProduct: React.FC = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Category</FormLabel>
+                    <FormLabel>{t("addproduct.category")} <span style={{ color: "red" }}>*</span></FormLabel>
                       <ReactSelect
                         options={categories.map((c) => ({
                           value: String(c.Category_ID),
@@ -284,7 +286,7 @@ const AddProduct: React.FC = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Supplier</FormLabel>
+                    <FormLabel>{t("addproduct.supplier")} <span style={{ color: "red" }}>*</span></FormLabel>
                       <ReactSelect
                         options={suppliers.map((s) => ({
                           value: String(s.Supplier_ID),
@@ -309,7 +311,7 @@ const AddProduct: React.FC = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Purchase Price</FormLabel>
+                      <FormLabel>{t("addproduct.purchasePrice")} <span style={{ color: "red" }}>*</span></FormLabel>
                       <FormControl>
                         <Input type="number" step="0.01" {...field} />
                       </FormControl>
@@ -322,7 +324,7 @@ const AddProduct: React.FC = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>IVA / Tax</FormLabel>
+                      <FormLabel>{t("addproduct.IVA")} <span style={{ color: "red" }}>*</span></FormLabel>
                       <FormControl>
                         <Input type="number" {...field} />
                       </FormControl>
@@ -335,7 +337,7 @@ const AddProduct: React.FC = () => {
                   name="Margin"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("addproduct.margin")}</FormLabel>
+                      <FormLabel>{t("addproduct.margin")} <span style={{ color: "red" }}>*</span></FormLabel>
                       <FormControl>
                         <Input type="number" {...field} />
                       </FormControl>
@@ -348,7 +350,7 @@ const AddProduct: React.FC = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>EAN Code</FormLabel>
+                      <FormLabel>{t("addproduct.eanCode")} <span style={{ color: "red" }}>*</span></FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -362,7 +364,8 @@ const AddProduct: React.FC = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Short Code</FormLabel>
+                   <FormLabel>{t("addproduct.shortCode")} <span style={{ color: "red" }}>*</span></FormLabel>
+                      
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -376,7 +379,7 @@ const AddProduct: React.FC = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Product Family Code</FormLabel>
+                       <FormLabel>{t("addproduct.productFamilyCode")} <span style={{ color: "red" }}>*</span></FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -389,7 +392,7 @@ const AddProduct: React.FC = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Selling Price</FormLabel>
+                      <FormLabel>{t("addproduct.sellingPrice")} <span style={{ color: "red" }}>*</span></FormLabel>
                       <FormControl>
                         <Input type="number" step="0.01" {...field} />
                       </FormControl>
@@ -403,7 +406,7 @@ const AddProduct: React.FC = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Quantity</FormLabel>
+                                         <FormLabel>{t("addproduct.quantity")} <span style={{ color: "red" }}>*</span></FormLabel>
                       <FormControl>
                         <Input type="number" {...field} />
                       </FormControl>
@@ -417,7 +420,7 @@ const AddProduct: React.FC = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Unit</FormLabel>
+                      <FormLabel>{t("addproduct.unit")} <span style={{ color: "red" }}>*</span></FormLabel>
                       <ReactSelect
                         options={units.map((u) => ({
                           value: String(u.Unit_Id),
@@ -444,7 +447,7 @@ const AddProduct: React.FC = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Warehouse</FormLabel>
+                      <FormLabel>{t("addproduct.warehouse")} <span style={{ color: "red" }}>*</span></FormLabel>
                       <ReactSelect
                         options={warehouses.map((w) => ({
                           value: String(w.Warehouse_Id),
@@ -477,7 +480,7 @@ const AddProduct: React.FC = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>Entry Date</FormLabel>
+                      <FormLabel>{t("addproduct.entryDate")} <span style={{ color: "red" }}>*</span></FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -515,7 +518,7 @@ const AddProduct: React.FC = () => {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Remarks</FormLabel>
+                      <FormLabel>{t("addproduct.remarks")} <span style={{ color: "red" }}>*</span></FormLabel>
                     <FormControl>
                       <Textarea className="resize-none" {...field} />
                     </FormControl>
@@ -530,9 +533,9 @@ const AddProduct: React.FC = () => {
                   type="button"
                   onClick={() => navigate("/inventory")}
                 >
-                  Cancel
+                  {t("addproduct.cancel")}
                 </Button>
-                <Button type="submit">Save</Button>
+               <Button type="submit">{t("addproduct.save")}</Button>
               </div>
             </form>
           </Form>

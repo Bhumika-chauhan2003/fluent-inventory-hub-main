@@ -95,7 +95,7 @@ const CustomerMaster: React.FC = () => {
       console.log('Save result:', result);
 
       if (result.success) {
-        alert(editMode ? 'Customer updated successfully!' : 'Customer added successfully!');
+        toast.success(editMode ? t('customerForm.UpdateSuccess') : t('customerForm.AddSuccess'));
         resetForm();
         fetchCustomers();
         setTabValue('CustomerListing');
@@ -119,9 +119,10 @@ const CustomerMaster: React.FC = () => {
     setTabValue('CustomerForm');
   };
 
-  const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this customer?');
-    if (!confirmDelete) return;
+const handleDelete = async (id: string) => {
+  const confirmDelete = window.confirm('Are you sure you want to delete this customer?');
+  if (!confirmDelete) return;
+
 
     const payload = {
       entity: 'Customer',
@@ -137,18 +138,19 @@ const CustomerMaster: React.FC = () => {
       headers: { 'Content-Type': 'application/json' },
     });
 
-      const result = await res.json();
-      if (result.success) {
-        alert('Customer deleted successfully!');
-        fetchCustomers();
-      } else {
-        alert('Delete failed.');
-      }
-    } catch (err) {
-      console.error('Delete error:', err);
-      alert('Error while deleting customer.');
+    const result = await res.json();
+    if (result.success) {
+      toast.success(t('customerForm.deleteSuccess'));
+      fetchCustomers(); // Refresh customer list
+    } else {
+      toast.error('Failed to delete the customer.');
     }
-  };
+  } catch (err) {
+    console.error('Delete error:', err);
+    toast.error('Error while deleting customer.');
+  }
+};
+
 
   useEffect(() => {
     fetchCustomers();

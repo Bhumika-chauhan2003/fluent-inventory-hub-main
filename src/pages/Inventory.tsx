@@ -46,7 +46,6 @@ const Inventory: React.FC = () => {
   // ✅ Use proxy path to avoid CORS issue
   const API_URL = import.meta.env.VITE_API_URL
 
-
   useEffect(() => {
     const fetchProducts = async () => {
       debugger;
@@ -73,6 +72,7 @@ const Inventory: React.FC = () => {
   }, []);
 
 const handleDeleteConfirm = async () => {
+  debugger;
   if (!productToDelete) return;
 console.log("Deleting product:", productToDelete);
   try {
@@ -88,7 +88,7 @@ console.log("Deleting product:", productToDelete);
         prev.filter((p) => p.productid !== productToDelete)
       );
     } else {
-      toast.error("Delete failed");
+      toast.error("Delete failed it is a part of a Inventory transaction");
     }
   } catch (err) {
     console.error("Failed to delete product:", err);
@@ -150,7 +150,7 @@ console.log("Deleting product:", productToDelete);
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
+                <span className="sr-only"> {t("inventory.openmenue")}</span>
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
