@@ -97,7 +97,7 @@ const AddProduct: React.FC = () => {
     const fetchDropdownData = async () => {
       try {
         const baseUrl =
-          import.meta.env.API_URL;
+          import.meta.env.VITE_API_URL;
         const [catRes, supRes, unitRes, wareRes] = await Promise.all([
           fetch(`${baseUrl}?entity=Category&action=list&active=1`),
           fetch(`${baseUrl}?action=list&entity=Supplier`),
@@ -131,7 +131,7 @@ const AddProduct: React.FC = () => {
       setLoading(true);
       try {
         const res = await fetch(
-           import.meta.env.API_URL+`?action=product&productid=${productId}`
+           import.meta.env.VITE_API_URL+`?action=product&productid=${productId}`
         );
         const json = await res.json();
         const prod = Array.isArray(json.data) ? json.data[0] : json.data;

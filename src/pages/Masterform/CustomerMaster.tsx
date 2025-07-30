@@ -14,7 +14,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
  
-const API_URL =  import.meta.env.API_URL;
+const API_URL =  import.meta.env.VITE_API_URL;
 
 const CustomerMaster: React.FC = () => {
   const { t } = useTranslation();
@@ -47,7 +47,7 @@ const CustomerMaster: React.FC = () => {
     debugger;
     setLoading(true);
     try {
-      const res = await fetch(import.meta.env.API_URL+`?entity=Customer&action=list&active=1`);
+      const res = await fetch(import.meta.env.VITE_API_URL+`?entity=Customer&action=list&active=1`);
       const data = await res.json();
       console.log('Fetched customers:', data);
       setCustomerList(data);
@@ -85,7 +85,7 @@ const CustomerMaster: React.FC = () => {
         };
 
     try {
-      const res = await fetch(import.meta.env.API_URL, {
+      const res = await fetch(import.meta.env.VITE_API_URL, {
         method: 'POST',
         body: JSON.stringify(payload),
         headers: { 'Content-Type': 'application/json' },
@@ -131,7 +131,7 @@ const CustomerMaster: React.FC = () => {
     };
 
   try {
-    const res = await fetch(import.meta.env.API_URL, {
+    const res = await fetch(import.meta.env.VITE_API_URL, {
       method: 'POST',
       body: JSON.stringify(payload),
       headers: { 'Content-Type': 'application/json' },

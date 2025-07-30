@@ -28,7 +28,8 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import ReactSelect from "react-select";
- 
+
+const baseUrl =  import.meta.env.VITE_API_URL;
 const formSchema = z.object({
   productName: z.string().min(2, "Product name must be at least 2 characters"),
   specification: z.string().min(2, "Specification must be at least 2 characters"),
@@ -102,7 +103,6 @@ console.log("Form default values:", form.getValues());
   React.useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const baseUrl =  import.meta.env.API_URL;
         const [catRes, supRes, unitRes, wareRes] = await Promise.all([
           fetch(`${baseUrl}?entity=Category&action=list&active=1`),
           fetch(`${baseUrl}?action=list&entity=Supplier`),
@@ -156,7 +156,7 @@ console.log("Payload to be sent:", payload);
     try {
       debugger;
       await fetch(
-        "API_URL?action=product",
+        `${baseUrl}?action=product`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

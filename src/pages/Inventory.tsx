@@ -44,14 +44,14 @@ const Inventory: React.FC = () => {
   const [showImportDialog, setShowImportDialog] = useState(false);
 
   // ✅ Use proxy path to avoid CORS issue
-  const API_URL =
-     import.meta.env.API_URL
+  const API_URL = import.meta.env.VITE_API_URL
+
 
   useEffect(() => {
     const fetchProducts = async () => {
       debugger;
       try {
-        const res = await fetch( import.meta.env.API_URL+`?action=product`);
+        const res = await fetch( import.meta.env.VITE_API_URL+`?action=product`);
         const result = await res.json();
         // If your API returns { success: true, data: [...] }
         if (result.success && Array.isArray(result.data)) {
@@ -76,7 +76,7 @@ const handleDeleteConfirm = async () => {
   if (!productToDelete) return;
 console.log("Deleting product:", productToDelete);
   try {
-    const res = await fetch( import.meta.env.API_URL+`?action=deleteproduct&ProductID=${productToDelete}`, {
+    const res = await fetch( import.meta.env.VITE_API_URL+`?action=deleteproduct&ProductID=${productToDelete}`, {
       method: "GET",
     });
 

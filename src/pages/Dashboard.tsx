@@ -65,24 +65,26 @@ useEffect(() => {
   debugger;
     const fetchDashboardData = async () => {
       try {
-        // Replace with your actual API endpoints
-        const statsRes = await fetch
-        ( import.meta.env.API_URL+`?action=summary`);
-        console.log("Fetched stats:", statsRes);
-        const statsData = await statsRes.json();
-        setDashboardStats({
-          totalProducts: statsData.data.totalProducts,
-          lowStockItems: statsData.data.lowStockItems,
-          totalInventoryValue: statsData.data.totalInventoryValue,
-          totalSales: statsData.data.totalSales,
-          recentActivity: statsData.data.recentActivity, // Should be an array
-        });
-        console.log('Dashboard Stats:', statsData);
-        //    const productsRes = await fetch('/api/products');
-        //   const productsData = await productsRes.json();
-        // setProducts(productsData);
-        //   setProducts(productsData);
-      } catch (error) {
+  const statsRes = await fetch(`${import.meta.env.VITE_API_URL}?action=summary`);
+
+  if (!statsRes.ok) {
+    throw new Error(`Failed to fetch stats: ${statsRes.status}`);
+  }
+
+  const statsData = await statsRes.json();
+  console.log("Fetched stats:", statsData);
+
+  setDashboardStats({
+    totalProducts: statsData.data.totalProducts,
+    lowStockItems: statsData.data.lowStockItems,
+    totalInventoryValue: statsData.data.totalInventoryValue,
+    totalSales: statsData.data.totalSales,
+    recentActivity: statsData.data.recentActivity,
+  });
+
+  console.log("Dashboard Stats:", statsData);
+}
+ catch (error) {
         console.error('Failed to fetch dashboard data:', error);
       } finally {
         setLoading(false);
@@ -142,7 +144,7 @@ useEffect(() => {
   const handleExport = async () => {
   try {
     // Step 1: Fetch product data from the API
-    const response = await fetch( import.meta.env.API_URL+`?action=product`);
+    const response = await fetch( import.meta.env.VITE_API_URL+`?action=product`);
     const result = await response.json();
 console.log("Fetched products:", result);
     if (!result?.success || !Array.isArray(result?.data)) {

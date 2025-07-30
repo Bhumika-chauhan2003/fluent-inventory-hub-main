@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { toast } from "sonner";
  
-const API_URL =  import.meta.env.API_URL;
+const API_URL =  import.meta.env.VITE_API_URL;
 
 const SupplierMaster: React.FC = () => {
     const { t } = useTranslation();

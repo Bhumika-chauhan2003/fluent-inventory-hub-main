@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/card';
 
 
-const API_URL = import.meta.env.API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 const CategoryMaster: React.FC = () => {
   const { t } = useTranslation();
