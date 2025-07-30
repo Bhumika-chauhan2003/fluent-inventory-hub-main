@@ -25,6 +25,7 @@ import AiInsights from '@/components/dashboard/AiInsights';
 import BillGenerator from '@/components/dashboard/BillGenerator';
 import ImportDialog from '@/components/inventory/ImportDialog';
 import { checkSessionAndDevice } from "@/lib/utils";
+ 
 const Dashboard: React.FC = () => {
 
   const { t } = useTranslation();
@@ -64,24 +65,26 @@ useEffect(() => {
   debugger;
     const fetchDashboardData = async () => {
       try {
-        // Replace with your actual API endpoints 
-        // Fetching dashboard stats cors error check  
-        const statsRes = await fetch
-        ("https://script.google.com/macros/s/AKfycbzxJUc4GBGc88LF-enlrIyg6vd2P8IMBnDDd4IOhZfTIz33V8BGHKmDJ3vFLnQvRUyDog/exec?action=summary");
-        const statsData = await statsRes.json();
-        setDashboardStats({
-          totalProducts: statsData.data.totalProducts,
-          lowStockItems: statsData.data.lowStockItems,
-          totalInventoryValue: statsData.data.totalInventoryValue,
-          totalSales: statsData.data.totalSales,
-          recentActivity: statsData.data.recentActivity, // Should be an array
-        });
-        console.log('Dashboard Stats:', statsData);
-        //    const productsRes = await fetch('/api/products');
-        //   const productsData = await productsRes.json();
-        // setProducts(productsData);
-        //   setProducts(productsData);
-      } catch (error) {
+  const statsRes = await fetch(`${import.meta.env.VITE_API_URL}?action=summary`);
+
+  if (!statsRes.ok) {
+    throw new Error(`Failed to fetch stats: ${statsRes.status}`);
+  }
+
+  const statsData = await statsRes.json();
+  console.log("Fetched stats:", statsData);
+
+  setDashboardStats({
+    totalProducts: statsData.data.totalProducts,
+    lowStockItems: statsData.data.lowStockItems,
+    totalInventoryValue: statsData.data.totalInventoryValue,
+    totalSales: statsData.data.totalSales,
+    recentActivity: statsData.data.recentActivity,
+  });
+
+  console.log("Dashboard Stats:", statsData);
+}
+ catch (error) {
         console.error('Failed to fetch dashboard data:', error);
       } finally {
         setLoading(false);
@@ -141,7 +144,8 @@ useEffect(() => {
   const handleExport = async () => {
   try {
     // Step 1: Fetch product data from the API
-    const response = await fetch(`https://script.google.com/macros/s/AKfycbzxJUc4GBGc88LF-enlrIyg6vd2P8IMBnDDd4IOhZfTIz33V8BGHKmDJ3vFLnQvRUyDog/exec?action=product`);
+
+    const response = await fetch( import.meta.env.VITE_API_URL+`?action=product`);
     const result = await response.json();
 console.log("Fetched products:", result);
     if (!result?.success || !Array.isArray(result?.data)) {

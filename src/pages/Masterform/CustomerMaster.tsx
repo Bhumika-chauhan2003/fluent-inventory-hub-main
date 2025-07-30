@@ -13,8 +13,8 @@ import {
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
-
-const API_URL = 'https://script.google.com/macros/s/AKfycbzxJUc4GBGc88LF-enlrIyg6vd2P8IMBnDDd4IOhZfTIz33V8BGHKmDJ3vFLnQvRUyDog/exec'; // ✅ Use your Web App URL
+ 
+const API_URL =  import.meta.env.VITE_API_URL;
 
 const CustomerMaster: React.FC = () => {
   const { t } = useTranslation();
@@ -47,7 +47,7 @@ const CustomerMaster: React.FC = () => {
     debugger;
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}?entity=Customer&action=list&active=1`);
+      const res = await fetch(import.meta.env.VITE_API_URL+`?entity=Customer&action=list&active=1`);
       const data = await res.json();
       console.log('Fetched customers:', data);
       setCustomerList(data);
@@ -85,7 +85,7 @@ const CustomerMaster: React.FC = () => {
         };
 
     try {
-      const res = await fetch(API_URL, {
+      const res = await fetch(import.meta.env.VITE_API_URL, {
         method: 'POST',
         body: JSON.stringify(payload),
         headers: { 'Content-Type': 'application/json' },
@@ -123,15 +123,16 @@ const handleDelete = async (id: string) => {
   const confirmDelete = window.confirm('Are you sure you want to delete this customer?');
   if (!confirmDelete) return;
 
-  const payload = {
-    entity: 'Customer',
-    action: 'delete',
-    id,
-    ModifiedBy: '1',
-  };
+
+    const payload = {
+      entity: 'Customer',
+      action: 'delete',
+      id,
+      ModifiedBy: '1',
+    };
 
   try {
-    const res = await fetch(API_URL, {
+    const res = await fetch(import.meta.env.VITE_API_URL, {
       method: 'POST',
       body: JSON.stringify(payload),
       headers: { 'Content-Type': 'application/json' },

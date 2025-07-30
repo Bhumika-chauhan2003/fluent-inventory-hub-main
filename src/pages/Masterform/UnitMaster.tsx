@@ -12,9 +12,8 @@ import {
 } from "@/components/ui/card";
 import { useTranslation } from "@/hooks/useTranslationWrapper";
 import { toast } from "sonner";
-
-const API_URL =
-  "https://script.google.com/macros/s/AKfycbzxJUc4GBGc88LF-enlrIyg6vd2P8IMBnDDd4IOhZfTIz33V8BGHKmDJ3vFLnQvRUyDog/exec";
+ 
+const API_URL =  import.meta.env.VITE_API_URL;
 
 const UnitMaster: React.FC = () => {
   const { t } = useTranslation();
