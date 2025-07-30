@@ -57,15 +57,12 @@ const Billing: React.FC = () => {
   const totalDiscount = discount;
   const totalTax = (subtotal - totalDiscount) * (tax / 100);
   const grandTotal = subtotal - totalDiscount + totalTax;
- 
-const API_URL =  import.meta.env.VITE_API_URL;
-console.log("API URL:", API_URL);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-           import.meta.env.VITE_API_URL+'?action=product'
+          import.meta.env.VITE_API_URL+"?action=product"
         );
         const data = await response.json();
         setProducts(data.data || []);
@@ -82,7 +79,7 @@ console.log("API URL:", API_URL);
     const fetchCustomers = async () => {
       try {
         const res = await fetch(
-           import.meta.env.VITE_API_URL+"?action=list&entity=Customer&active=1"
+          import.meta.env.VITE_API_URL+"?action=list&entity=Customer&active=1"
         );
         const data = await res.json();
         setCustomers(data || []);
@@ -95,10 +92,6 @@ console.log("API URL:", API_URL);
     fetchCustomers();
   }, []);
 
-  // let subtotal = items.reduce((sum, item) => sum + item.total, 0);
-  // let totalDiscount = discount;
-  // let totalTax = (subtotal - totalDiscount) * (tax / 100);
-  // let grandTotal = subtotal - totalDiscount + totalTax;
   const handleAddItem = () => {
     setItems([
       ...items,
@@ -194,7 +187,7 @@ if (!product) return;
   
     try {
       const response = await fetch(
-         import.meta.env.VITE_API_URL,
+        import.meta.env.VITE_API_URL,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -216,30 +209,30 @@ if (!product) return;
     }
   };
 
-  // const handlePrintInvoice = async () => {
-  //   debugger;
-  //   if (!invoiceNumber) {
-  //     alert("Please generate invoice first.");
-  //     return;
-  //   }
+  const handlePrintInvoice = async () => {
+    debugger;
+    if (!invoiceNumber) {
+      alert("Please generate invoice first.");
+      return;
+    }
 
-  //   try {
-  //     const response = await fetch(
-  //        import.meta.env.VITE_API_URL+`?action=Invoicetstenew&InvoiceNumber=${invoiceNumber}`
-  //     );
-  //     const result = await response.json();
+    try {
+      const response = await fetch(
+        import.meta.env.VITE_API_URL+`?action=Invoicetstenew&InvoiceNumber=${invoiceNumber}`
+      );
+      const result = await response.json();
 
-  //     if (result.data) {
-  //       setSelectedInvoice(result.data);
-  //       printSavedInvoice(result.data);
-  //     } else {
-  //       alert("Invoice not found. Please try again.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Print fetch failed:", error);
-  //     alert("Failed to fetch invoice for printing.");
-  //   }
-  // };
+      if (result.data) {
+        setSelectedInvoice(result.data);
+        printSavedInvoice(result.data);
+      } else {
+        alert("Invoice not found. Please try again.");
+      }
+    } catch (error) {
+      console.error("Print fetch failed:", error);
+      alert("Failed to fetch invoice for printing.");
+    }
+  };
 
 const printSavedInvoice = (invoice: any) => {
   const printWindow = window.open("", "_blank", "width=800,height=600");
